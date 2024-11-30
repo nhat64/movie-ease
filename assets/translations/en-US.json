@@ -1,0 +1,20 @@
+{
+    "hello": "Hello",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "language": "Language",
+    "vietnamese": "Vietnamese",
+    "english": "English",
+    "home": "Home",
+    "ticket": "Ticket",
+    "movie": "Movie",
+    "profile": "Profile",
+    "movieIsShowing": "Now showing",
+    "movieIsComing": "Coming soon",
+    "voucher": "Voucher",
+    "notification": "Notification",
+    "search": "Search",
+    "cinema": "Cinema",
+    "gift": "Gift",
+    "getTicket": "Get ticket"
+}

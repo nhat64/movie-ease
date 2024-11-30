@@ -1,0 +1,20 @@
+{
+    "hello": "Xin chào",
+    "darkMode": "Chế độ tối",
+    "lightMode": "Chế độ sáng",
+    "language": "Ngôn ngữ",
+    "vietnamese": "Tiếng Việt",
+    "english": "Tiếng Anh",
+    "home": "Trang chủ",
+    "ticket": "Vé",
+    "movie": "Phim",
+    "profile": "Hồ sơ",
+    "movieIsShowing": "Đang chiếu",
+    "movieIsComing": "Sắp chiếu",
+    "voucher": "Khuyến mãi",
+    "notification": "Thông báo",
+    "search": "Tìm kiếm",
+    "cinema": "Rạp",
+    "gift": "Quà tặng",
+    "getTicket": "Đặt vé"
+}
