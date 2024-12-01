@@ -5,10 +5,16 @@ class LoginController extends BaseController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  final FocusNode emaiFocusNode = FocusNode();
+  final FocusNode passFocusNode = FocusNode();
+
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+
+    emaiFocusNode.dispose();
+    passFocusNode.dispose();
     super.dispose();
   }
 }

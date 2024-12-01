@@ -1,11 +1,22 @@
 import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
+import 'package:base_flutter/app/base/widget_common/outline_textfield_custom.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/presentation/module/auth/login/login_controller.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends BaseScreen<LoginController> {
   const LoginPage({super.key});
+
+  @override
+  Color? get screenBackgroundColor => Colors.black;
+
+  @override
+  Function() get onTapScreen => () {
+        FocusScope.of(Get.context!).requestFocus(FocusNode());
+      };
 
   @override
   PreferredSizeWidget? buildAppBar(BuildContext context) {
@@ -45,56 +56,44 @@ class LoginPage extends BaseScreen<LoginController> {
               color: Colors.white,
             ),
             const SizedBox(height: 40),
-            TextField(
-              controller: controller.emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.white),
+            _buildTextField(
+              textController: controller.emailController,
+              focusNode: controller.emaiFocusNode,
+              title: 'Email',
+              hint: 'Email',
+              prefixIcon: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Icon(
+                  Icons.email,
+                  color: Colors.white,
+                  size: 24,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                prefixIcon: const Icon(Icons.email, color: Colors.white),
               ),
-              style: const TextStyle(color: Colors.white),
-              keyboardType: TextInputType.emailAddress,
+              inputAction: TextInputAction.next,
             ),
             const SizedBox(height: 20),
-            TextField(
-              controller: controller.passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                labelStyle: const TextStyle(color: Colors.white),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.white),
+            _buildTextField(
+              textController: controller.passwordController,
+              focusNode: controller.passFocusNode,
+              title: 'Mật khẩu',
+              hint: 'Mật khẩu',
+              isPassword: true,
+              prefixIcon: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                  size: 24,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                prefixIcon: const Icon(Icons.lock, color: Colors.white),
               ),
-              style: const TextStyle(color: Colors.white),
-              obscureText: true,
+              inputAction: TextInputAction.done,
             ),
             const SizedBox(height: 30),
             ScaleButton(
               onTap: () {},
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: BoxDecoration(
                   color: AppColors.yellowFCC434,
                   borderRadius: BorderRadius.circular(8),
@@ -116,7 +115,7 @@ class LoginPage extends BaseScreen<LoginController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Don\'t have an account?',
+                  'Chưa có tài khoản ?',
                   style: TextStyle(
                     color: Colors.grey[400],
                     fontSize: 14,
@@ -126,9 +125,11 @@ class LoginPage extends BaseScreen<LoginController> {
                 Row(
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.offNamed(RouteName.register);
+                      },
                       child: const Text(
-                        "Sign Up",
+                        "Đăng ký",
                         style: TextStyle(
                           color: AppColors.yellowFCC434,
                           fontSize: 14,
@@ -141,6 +142,53 @@ class LoginPage extends BaseScreen<LoginController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _buildTextField({
+    required TextEditingController textController,
+    required FocusNode focusNode,
+    required String title,
+    required String hint,
+    Widget? prefixIcon,
+    bool isPassword = false,
+    TextInputAction? inputAction,
+  }) {
+    return OutlineTextFieldCustom(
+      controller: textController,
+      focusNode: focusNode,
+      contentStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      keyboardType: TextInputType.text,
+      labelText: title,
+      labelStyle: const TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.w400,
+      ),
+      textInputAction: inputAction,
+      prefixIcon: prefixIcon,
+      suffixColor: Colors.white,
+      hintText: hint,
+      hintStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: AppColors.neutral8C8C8C,
+      ),
+      isPassword: isPassword,
+      cursorColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.white),
       ),
     );
   }

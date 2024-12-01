@@ -1,10 +1,14 @@
 import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
+import 'package:base_flutter/app/base/widget_common/custom_dialog.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
+import 'package:base_flutter/presentation/widgets/app_dialog/show_login_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({super.key});
@@ -100,7 +104,10 @@ class DrawerMenu extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 16),
       child: ScaleButton(
-        onTap: () {},
+        onTap: () {
+          // Get.toNamed(RouteName.login);
+          showLoginWarningDialog();
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(

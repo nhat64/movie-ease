@@ -11,7 +11,7 @@ abstract class BaseScreen<T extends GetxController> extends GetView<T> {
     }
 
     return GestureDetector(
-      onTap: opTapScreen,
+      onTap: onTapScreen,
       behavior: HitTestBehavior.translucent,
       child: Container(
         color: unSafeAreaColor,
@@ -47,7 +47,8 @@ abstract class BaseScreen<T extends GetxController> extends GetView<T> {
   Widget? buildFloatingActionButton() => null;
 
   @protected
-  FloatingActionButtonLocation? get floatingActionButtonLocation => FloatingActionButtonLocation.centerDocked;
+  FloatingActionButtonLocation? get floatingActionButtonLocation =>
+      FloatingActionButtonLocation.centerDocked;
 
   @protected
   Widget? buildBottomNavigationBar(BuildContext context) => null;
@@ -82,7 +83,7 @@ abstract class BaseScreen<T extends GetxController> extends GetView<T> {
   bool get setTopSafeArea => true;
 
   @protected
-  VoidCallback? get opTapScreen => null;
+  VoidCallback? get onTapScreen => null;
 
   @protected
   Key? get keyScaffold => null;

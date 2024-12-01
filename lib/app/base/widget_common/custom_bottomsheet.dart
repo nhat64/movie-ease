@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-showCustomModalBottomSheet<T>({
+// có cả persiten bottomsheet nữa bottom sheet này không chặn thao tác màn hình bên dưới
+// modal bottm sheet thì chặn thao tác màn hình bên dưới, có thể gg để hiểu thêm
+
+Future<T?> showCustomModalBottomSheet<T>({
   required BuildContext context,
   required Widget child,
   Color backgroundColor = Colors.white,
