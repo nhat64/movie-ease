@@ -1,3 +1,7 @@
+import 'package:base_flutter/presentation/module/auth/login/login_binding.dart';
+import 'package:base_flutter/presentation/module/auth/login/login_page.dart';
+import 'package:base_flutter/presentation/module/auth/register/register_page.dart';
+import 'package:base_flutter/presentation/module/auth/register/registor_bindings.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_binding.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_page.dart';
 import 'package:base_flutter/presentation/module/booking/select_seats/select_seats_binding.dart';
@@ -68,5 +72,19 @@ class AppPages {
       page: () => const MovieSearchPage(),
       binding: MovieSearchBinding(),
     ),
+    GetPage(
+      name: RouteName.login,
+      page: () => const LoginPage(),
+      binding: LoginBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: RouteName.register,
+      page: () => const RegisterPage(),
+      binding: RegisterBindings(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 200),
+    )
   ];
 }
