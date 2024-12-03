@@ -49,6 +49,11 @@ class SvgPaths {
   static const String icAddTicket = '$_basePath/ic_add_ticket.svg';
 
   static const String icLogout = '$_basePath/ic_logout.svg';
+
+  static const String icGift = '$_basePath/ic_gift.svg';
+  static const String icGiftSelected = '$_basePath/ic_gift_selected.svg';
+  static const String icPopcorn = '$_basePath/ic_popcorn.svg';
+  static const String icPopcornSelected = '$_basePath/ic_popcorn_selected.svg';
 }
 
 class ImagePaths {
