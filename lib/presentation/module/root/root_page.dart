@@ -63,6 +63,7 @@ class RootPage extends BaseScreen<RootController> {
           child: CinemaBottomNav(
             key: controller.bottomNavKey,
             onIndexChange: controller.onIndexNavChanged,
+            onNotchTap: controller.onAddTicket,
           ),
         ),
       ],

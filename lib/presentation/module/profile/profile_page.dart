@@ -3,8 +3,10 @@ import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/presentation/module/profile/profile_controller.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class ProfilePage extends BaseScreen<ProfileController> {
   const ProfilePage({super.key});
@@ -121,11 +123,9 @@ class ProfilePage extends BaseScreen<ProfileController> {
         _buildOption(
           title: 'Vé của tôi',
           icon: SvgPaths.icTicket,
-        ),
-        _buildDividerProfileOption(),
-        _buildOption(
-          title: 'Lịch sử',
-          icon: SvgPaths.icCalendar,
+          onTap: () {
+            Get.toNamed(RouteName.myTicket);
+          },
         ),
         _buildDividerProfileOption(),
         _buildOption(
@@ -147,9 +147,12 @@ class ProfilePage extends BaseScreen<ProfileController> {
   _buildOption({
     required String title,
     required String icon,
+    VoidCallback? onTap,
   }) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        onTap?.call();
+      },
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(

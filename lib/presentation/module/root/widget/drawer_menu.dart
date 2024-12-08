@@ -1,11 +1,13 @@
-import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
+import 'package:base_flutter/presentation/module/root/root_controller.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:base_flutter/presentation/widgets/app_dialog/show_login_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({super.key});
@@ -84,14 +86,35 @@ class DrawerMenu extends StatelessWidget {
       child: Column(
         children: [
           _buildOption(
-            title: 'Đặt vé theo rạp',
-            icon: SvgPaths.icVideo,
-          ),
+              title: 'Phim',
+              icon: SvgPaths.icMovie,
+              onTap: () {
+                Get.toNamed(RouteName.searchMovie);
+              }),
           _buildDividerProfileOption(),
           _buildOption(
-            title: 'Đặt vé theo phim',
-            icon: SvgPaths.icMovie,
-          ),
+              title: 'Đặt vé theo rạp',
+              icon: SvgPaths.icVideo,
+              onTap: () {
+                Get.toNamed(RouteName.selectCinema);
+              }),
+          _buildDividerProfileOption(),
+          _buildOption(
+              title: 'Đặt vé theo phim',
+              icon: SvgPaths.icMovie,
+              onTap: () {
+                Get.toNamed(RouteName.searchMovie);
+              }),
+          _buildDividerProfileOption(),
+          _buildOption(
+              title: 'Khuyễn mãi',
+              icon: SvgPaths.icGift,
+              onTap: () {
+                final RootController rootController = Get.find<RootController>();
+                rootController.currentPageIndex.value = 2;
+                rootController.bottomNavKey.currentState?.toggleIndex(2);
+                rootController.toggleDrawer();
+              }),
         ],
       ),
     );
@@ -147,10 +170,11 @@ class DrawerMenu extends StatelessWidget {
   _buildOption({
     required String title,
     required String icon,
+    VoidCallback? onTap,
   }) {
     return InkWell(
       onTap: () {
-        Log.console('onTap $title');
+        onTap?.call();
       },
       child: Padding(
         padding: const EdgeInsets.all(8),

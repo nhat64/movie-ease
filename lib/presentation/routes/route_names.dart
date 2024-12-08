@@ -10,4 +10,5 @@ class RouteName {
   static const searchMovie = '/searchMovie';
   static const login = '/login';
   static const register = '/register';
+  static const myTicket = '/myTicket';
 }

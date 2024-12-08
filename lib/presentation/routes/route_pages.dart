@@ -2,6 +2,8 @@ import 'package:base_flutter/presentation/module/auth/login/login_binding.dart';
 import 'package:base_flutter/presentation/module/auth/login/login_page.dart';
 import 'package:base_flutter/presentation/module/auth/register/register_page.dart';
 import 'package:base_flutter/presentation/module/auth/register/registor_bindings.dart';
+import 'package:base_flutter/presentation/module/booking/my_ticket/my_ticket_binding.dart';
+import 'package:base_flutter/presentation/module/booking/my_ticket/my_ticket_page.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_binding.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_page.dart';
 import 'package:base_flutter/presentation/module/booking/select_seats/select_seats_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       binding: RegisterBindings(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: RouteName.myTicket,
+      page: () => const MyTicketPage(),
+      binding: MyTicketBindng(),
     )
   ];
 }

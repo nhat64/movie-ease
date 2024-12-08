@@ -143,7 +143,7 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                       const SizedBox(height: 20),
                       ReadMoreText(
                         controller.movie.description,
-                        trimMode: TrimMode.Line,
+                        trimMode: TrimMode.line,
                         trimLines: 3,
                         trimCollapsedText: 'Show more',
                         trimExpandedText: 'Show less',

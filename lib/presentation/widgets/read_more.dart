@@ -3,7 +3,7 @@ import 'dart:ui' as ui show TextHeightBehavior;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-enum TrimMode { Length, Line }
+enum TrimMode { length, line }
 
 /// Defines a customizable pattern within text, such as hashtags, URLs, or mentions.
 ///
@@ -35,7 +35,7 @@ class ReadMoreText extends StatefulWidget {
     this.colorClickableText,
     this.trimLength = 240,
     this.trimLines = 2,
-    this.trimMode = TrimMode.Length,
+    this.trimMode = TrimMode.length,
     this.moreStyle,
     this.lessStyle,
     this.delimiter = '$_kEllipsis ',
@@ -69,7 +69,7 @@ class ReadMoreText extends StatefulWidget {
     this.colorClickableText,
     this.trimLength = 240,
     this.trimLines = 2,
-    this.trimMode = TrimMode.Length,
+    this.trimMode = TrimMode.length,
     this.moreStyle,
     this.lessStyle,
     this.delimiter = '$_kEllipsis ',
@@ -379,7 +379,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
         late final TextSpan textSpan;
         switch (widget.trimMode) {
-          case TrimMode.Length:
+          case TrimMode.length:
             // Constructed by ReadMoreText.rich(...)
             if (widget.richData != null) {
               final trimResult = _trimTextSpan(
@@ -425,7 +425,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
               }
             }
             break;
-          case TrimMode.Line:
+          case TrimMode.line:
             if (textPainter.didExceedMaxLines) {
               final effectiveDataTextSpan = isCollapsed
                   ? _trimTextSpan(
