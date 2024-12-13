@@ -11,7 +11,7 @@ class BaseResponse {
   });
 
   final int status;
-  final String? message;
+  final dynamic message;
   final dynamic data;
 
   factory BaseResponse.fromJson(Map<String, dynamic> json) => _$BaseResponseFromJson(json);

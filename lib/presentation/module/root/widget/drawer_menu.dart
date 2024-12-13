@@ -2,9 +2,9 @@ import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
+import 'package:base_flutter/app_provider.dart';
 import 'package:base_flutter/presentation/module/root/root_controller.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
-import 'package:base_flutter/presentation/widgets/app_dialog/show_login_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -110,9 +110,9 @@ class DrawerMenu extends StatelessWidget {
               title: 'Khuyễn mãi',
               icon: SvgPaths.icGift,
               onTap: () {
-                final RootController rootController = Get.find<RootController>();
-                rootController.currentPageIndex.value = 2;
-                rootController.bottomNavKey.currentState?.toggleIndex(2);
+                final RootController rootController =
+                    Get.find<RootController>();
+                rootController.onIndexNavChanged(2);
                 rootController.toggleDrawer();
               }),
         ],
@@ -121,41 +121,52 @@ class DrawerMenu extends StatelessWidget {
   }
 
   _buildFooterDrawer() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 16),
-      child: ScaleButton(
-        onTap: () {
-          // Get.toNamed(RouteName.login);
-          showLoginWarningDialog();
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: AppColors.yellowFCC434,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Center(
+    return Obx(
+      () {
+        final bool isAuth = Get.find<AppProvider>().userData.value != null;
+
+        if (isAuth) {
+          return const Center(
             child: Text(
-              'Đăng nhập',
+              'Version 1.0.0',
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+                color: AppColors.yellowFCC434,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
               ),
             ),
-          ),
-        ),
-      ),
-      // child: Center(
-      //   child: Text(
-      //     'Version 1.0.0',
-      //     style: TextStyle(
-      //       color: AppColors.yellowFCC434,
-      //       fontSize: 14,
-      //       fontWeight: FontWeight.w400,
-      //     ),
-      //   ),
-      // ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 16),
+            child: ScaleButton(
+              onTap: () {
+                Get.toNamed(RouteName.login);
+                Get.find<RootController>().toggleDrawer();
+
+                // showLoginWarningDialog();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.yellowFCC434,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Đăng nhập',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 

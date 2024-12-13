@@ -11,7 +11,11 @@ class PopcornPage extends BaseScreen<PopcornController> {
   @override
   Widget buildScreen(BuildContext context) {
     return const Center(
-      child: Text('Popcorn Page'),
+      child: Text(
+        'Đây là một page trống',
+        style: TextStyle(color: Colors.white, fontSize: 24),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }

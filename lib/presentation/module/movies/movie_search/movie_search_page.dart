@@ -5,7 +5,6 @@ import 'package:base_flutter/app/base/widget_common/outline_textfield_custom.dar
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
-import 'package:base_flutter/app/utils/time_convert.dart';
 import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/presentation/module/movies/movie_search/movie_search_controller.dart';
 import 'package:base_flutter/presentation/module/movies/widget/switch_bar.dart';
@@ -72,7 +71,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                   element.name
                       .toLowerCase()
                       .contains(controller.textSearch.toLowerCase()) ||
-                  element.movieGenre
+                  element.genre
                       .join('.')
                       .toLowerCase()
                       .contains(controller.textSearch.toLowerCase()))
@@ -173,12 +172,12 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                   const SizedBox(height: 8),
                   buildInfoRow(
                     svgPath: SvgPaths.icClock,
-                    content: formatDurationToMinuteWord(movie.duration),
+                    content: '$movie.durationMinute} phút',
                   ),
                   const SizedBox(height: 8),
                   buildInfoRow(
                     svgPath: SvgPaths.icMovie,
-                    content: movie.movieGenre.join(', '),
+                    content: movie.genre.join(', '),
                     maxLines: 2,
                   ),
                 ],
@@ -249,7 +248,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
         color: Colors.white,
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      keyboardType: TextInputType.text,
+      textInputType: TextInputType.text,
       filled: true,
       fillColor: AppColors.neutral1C1C1C,
       prefixIcon: Padding(

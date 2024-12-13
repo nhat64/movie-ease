@@ -61,9 +61,8 @@ class LocalStorage {
   }
 }
 
-class SharedPreferencesKeys {
+class LocalStorageKeys {
   static const accessToken = 'accessToken'; // String
-  static const refreshToken = 'refreshToken'; // String
   static const darkMode = 'darkMode'; // bool
   static const locale = 'locale'; // String vi_VN, en_US
 }

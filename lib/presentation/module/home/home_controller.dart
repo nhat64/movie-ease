@@ -28,6 +28,7 @@ class HomeController extends BaseController {
 
   onTabBarChanged(int index) {
     isShowShowing.value = index == 0;
+    currentShowingIndex.value = 0;
   }
 
   @override

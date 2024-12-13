@@ -57,10 +57,10 @@ class LoginPage extends BaseScreen<LoginController> {
             ),
             const SizedBox(height: 40),
             _buildTextField(
-              textController: controller.emailController,
-              focusNode: controller.emaiFocusNode,
-              title: 'Email',
-              hint: 'Email',
+              textController: controller.usernameController,
+              focusNode: controller.usernameFocusNode,
+              title: 'Tên đăng nhập',
+              hint: 'Tên đăng nhập',
               prefixIcon: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 14),
                 child: Icon(
@@ -88,9 +88,28 @@ class LoginPage extends BaseScreen<LoginController> {
               ),
               inputAction: TextInputAction.done,
             ),
+            Obx(() {
+              if (controller.errorText.value.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Text(
+                    controller.errorText.value,
+                    style: const TextStyle(
+                      color: Color(0xFFFF4136),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              );
+            }),
             const SizedBox(height: 30),
             ScaleButton(
-              onTap: () {},
+              onTap: controller.callLogin,
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -126,7 +145,9 @@ class LoginPage extends BaseScreen<LoginController> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Get.offNamed(RouteName.register);
+                        Get.toNamed(RouteName.register);
+                        controller.passFocusNode.unfocus();
+                        controller.usernameFocusNode.unfocus();
                       },
                       child: const Text(
                         "Đăng ký",
@@ -164,7 +185,7 @@ class LoginPage extends BaseScreen<LoginController> {
         color: Colors.white,
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-      keyboardType: TextInputType.text,
+      textInputType: TextInputType.text,
       labelText: title,
       labelStyle: const TextStyle(
         fontSize: 16,
@@ -188,7 +209,7 @@ class LoginPage extends BaseScreen<LoginController> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.white),
+        borderSide: const BorderSide(color: Color(0xFFFCC434)),
       ),
     );
   }

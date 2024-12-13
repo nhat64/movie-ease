@@ -1,3 +1,4 @@
+import 'package:base_flutter/data/entity/genre_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'movie_entity.g.dart';
@@ -7,11 +8,13 @@ class MovieEntity {
   final int id;
   final String poster;
   final String name;
+  @JsonKey(name: 'trailer_url')
   final String trailerUrl;
   final String date;
-  final int duration;
+  @JsonKey(name: 'duration')
+  final String durationMinute;
   final String director;
-  final List<String> movieGenre;
+  final List<GenreEntity> genre;
   final String rated;
   final String country;
   final String description;
@@ -20,16 +23,18 @@ class MovieEntity {
     required this.poster,
     required this.name,
     required this.date,
-    required this.duration,
+    required this.durationMinute,
     this.trailerUrl = 'youtube.com',
     this.director = 'Tên đạo diễn',
-    this.movieGenre = const ['Hành động', 'Kinh dị', 'Hài hước'],
+    this.genre = const [],
     this.rated = '18+',
     this.country = 'Việt Nam',
-    this.description = 'Một bộ phim hay về một chuyến phiêu lưu của những người hùng, những tên cướp, những kẻ thù...',
+    this.description =
+        'Một bộ phim hay về một chuyến phiêu lưu của những người hùng, những tên cướp, những kẻ thù...',
   });
 
-  factory MovieEntity.fromJson(Map<String, dynamic> json) => _$MovieEntityFromJson(json);
+  factory MovieEntity.fromJson(Map<String, dynamic> json) =>
+      _$MovieEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieEntityToJson(this);
 }

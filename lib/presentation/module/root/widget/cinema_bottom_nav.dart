@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
@@ -23,34 +22,37 @@ class CinemaBottomNavItem {
   });
 }
 
-class CinemaBottomNav extends StatefulWidget {
-  CinemaBottomNav({super.key, this.onIndexChange, this.onNotchTap});
+class CinemaBottomNav extends StatelessWidget {
+  CinemaBottomNav({
+    super.key,
+    required this.onIndexChange,
+    required this.onNotchTap,
+    required this.currentIndex,
+  });
 
   // tạm thời nhớ phải khai báo số chẵn
   final List<CinemaBottomNavItem> listItem = [
-    CinemaBottomNavItem(title: LocaleKeys.home, icon: SvgPicture.asset(SvgPaths.icHome), iconSelected: SvgPicture.asset(SvgPaths.icHomeSelected)),
-    CinemaBottomNavItem(title: 'Bắp nước', icon: SvgPicture.asset(SvgPaths.icPopcorn), iconSelected: SvgPicture.asset(SvgPaths.icPopcornSelected)),
-    CinemaBottomNavItem(title: 'Khuyễn mãi', icon: SvgPicture.asset(SvgPaths.icGift), iconSelected: SvgPicture.asset(SvgPaths.icGiftSelected)),
-    CinemaBottomNavItem(title: LocaleKeys.profile, icon: SvgPicture.asset(SvgPaths.icUser), iconSelected: SvgPicture.asset(SvgPaths.icUserSelected)),
+    CinemaBottomNavItem(
+        title: LocaleKeys.home,
+        icon: SvgPicture.asset(SvgPaths.icHome),
+        iconSelected: SvgPicture.asset(SvgPaths.icHomeSelected)),
+    CinemaBottomNavItem(
+        title: 'Bắp nước',
+        icon: SvgPicture.asset(SvgPaths.icPopcorn),
+        iconSelected: SvgPicture.asset(SvgPaths.icPopcornSelected)),
+    CinemaBottomNavItem(
+        title: 'Khuyễn mãi',
+        icon: SvgPicture.asset(SvgPaths.icGift),
+        iconSelected: SvgPicture.asset(SvgPaths.icGiftSelected)),
+    CinemaBottomNavItem(
+        title: LocaleKeys.profile,
+        icon: SvgPicture.asset(SvgPaths.icUser),
+        iconSelected: SvgPicture.asset(SvgPaths.icUserSelected)),
   ];
 
-  final void Function(int index)? onIndexChange;
-  final VoidCallback? onNotchTap;
-
-  @override
-  State<CinemaBottomNav> createState() => CinemaBottomNavState();
-}
-
-class CinemaBottomNavState extends State<CinemaBottomNav> {
-  int currentIndex = 0;
-
-  toggleIndex(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-
-    widget.onIndexChange?.call(index);
-  }
+  final void Function(int index) onIndexChange;
+  final VoidCallback onNotchTap;
+  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,11 @@ class CinemaBottomNavState extends State<CinemaBottomNav> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ...widget.listItem.sublist(0, widget.listItem.length ~/ 2).asMap().entries.map((entry) {
+                      ...listItem
+                          .sublist(0, listItem.length ~/ 2)
+                          .asMap()
+                          .entries
+                          .map((entry) {
                         final index = entry.key;
                         final item = entry.value;
                         return _buildNavItem(item, index);
@@ -96,10 +102,15 @@ class CinemaBottomNavState extends State<CinemaBottomNav> {
                       const Expanded(
                         child: SizedBox.shrink(),
                       ),
-                      ...widget.listItem.sublist(widget.listItem.length ~/ 2, widget.listItem.length).asMap().entries.map((entry) {
+                      ...listItem
+                          .sublist(listItem.length ~/ 2, listItem.length)
+                          .asMap()
+                          .entries
+                          .map((entry) {
                         final index = entry.key;
                         final item = entry.value;
-                        return _buildNavItem(item, index + widget.listItem.length ~/ 2);
+                        return _buildNavItem(
+                            item, index + listItem.length ~/ 2);
                       }),
                     ],
                   ),
@@ -111,7 +122,7 @@ class CinemaBottomNavState extends State<CinemaBottomNav> {
             bottom: 60 - 32 + 22,
             child: ScaleButton(
               onTap: () {
-                widget.onNotchTap?.call();
+                onNotchTap.call();
               },
               child: Transform.rotate(
                 angle: pi / 4,
@@ -146,14 +157,10 @@ class CinemaBottomNavState extends State<CinemaBottomNav> {
   }
 
   _buildNavItem(CinemaBottomNavItem item, int index) {
-    Log.console('index $index rebuild');
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          if (currentIndex == index) {
-            return;
-          }
-          toggleIndex(index);
+          onIndexChange(index);
         },
         behavior: HitTestBehavior.opaque,
         child: Column(
@@ -168,7 +175,9 @@ class CinemaBottomNavState extends State<CinemaBottomNav> {
             Text(
               item.title,
               style: TextStyle(
-                color: index == currentIndex ? AppColors.yellowFCC434 : AppColors.greyCCCCCC,
+                color: index == currentIndex
+                    ? AppColors.yellowFCC434
+                    : AppColors.greyCCCCCC,
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
               ),
@@ -201,8 +210,10 @@ Path _getNavPath(
   final notchWidth = size.width / itemCount;
 
   final Point<double> p1 = Point(notchWidth * (itemCount ~/ 2) + 3, 0);
-  final Point<double> p2 = Point(notchWidth * (itemCount ~/ 2) + notchWidth / 2, notchHeight);
-  final Point<double> p3 = Point(notchWidth * (itemCount ~/ 2) + notchWidth - 3, 0);
+  final Point<double> p2 =
+      Point(notchWidth * (itemCount ~/ 2) + notchWidth / 2, notchHeight);
+  final Point<double> p3 =
+      Point(notchWidth * (itemCount ~/ 2) + notchWidth - 3, 0);
 
   CustomPath.roundSharpCorners(p1, p2, p3, notchDistance, notchPath);
 
@@ -237,7 +248,11 @@ class _NavPaint extends CustomPainter {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
-    final navPath = _getNavPath(size, itemCount: itemCount, notchHeight: notchHeight, notchDistance: notchDistance, boderRadius: boderRadius);
+    final navPath = _getNavPath(size,
+        itemCount: itemCount,
+        notchHeight: notchHeight,
+        notchDistance: notchDistance,
+        boderRadius: boderRadius);
 
     canvas.drawPath(navPath, paint);
   }
@@ -261,7 +276,11 @@ class _NotchClipath extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    return _getNavPath(size, itemCount: itemCount, notchHeight: notchHeight, notchDistance: notchDistance, boderRadius: boderRadius);
+    return _getNavPath(size,
+        itemCount: itemCount,
+        notchHeight: notchHeight,
+        notchDistance: notchDistance,
+        boderRadius: boderRadius);
   }
 
   @override

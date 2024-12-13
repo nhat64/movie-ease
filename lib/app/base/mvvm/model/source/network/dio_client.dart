@@ -1,9 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class DioClient {
   late Dio _dio;
@@ -24,8 +25,8 @@ class DioClient {
     _dio
       ..options.baseUrl = baseUrl
       ..options.headers = getHeader()
-      ..options.connectTimeout = const Duration(seconds: 10)
-      ..options.receiveTimeout = const Duration(seconds: 10)
+      ..options.connectTimeout = const Duration(seconds: 10000)
+      ..options.receiveTimeout = const Duration(seconds: 10000)
       ..httpClientAdapter;
 
     if (interceptors?.isNotEmpty ?? false) {
@@ -34,13 +35,28 @@ class DioClient {
 
     // ADD LOG
     _dio.interceptors.add(LoggingInterceptor());
+    dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 120,
+        enabled: kDebugMode,
+        filter: (options, args) {
+          // don't print responses with unit8 list data
+          return !args.isResponse || !args.hasUint8ListData;
+        }));
 
     _dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
         // Don't trust any certificate just because their root cert is trusted.
-        final HttpClient client = HttpClient(context: SecurityContext(withTrustedRoots: false));
+        final HttpClient client =
+            HttpClient(context: SecurityContext(withTrustedRoots: false));
         // You can test the intermediate / root cert here. We just ignore it.
-        client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+        client.badCertificateCallback =
+            ((X509Certificate cert, String host, int port) => true);
         return client;
       },
     );
@@ -75,12 +91,14 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      return jsonDecode(response.data);
+      // return jsonDecode(response.data);
+      return response.data;
     } on SocketException catch (e) {
       Log.console(e, where: 'GET $baseUrl$uri', level: LogLevel.error);
       throw SocketException(e.toString());
     } on FormatException catch (_) {
-      Log.console('Unable to process the data', where: 'GET $baseUrl$uri', level: LogLevel.error);
+      Log.console('Unable to process the data',
+          where: 'GET $baseUrl$uri', level: LogLevel.error);
       throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
@@ -106,9 +124,11 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return jsonDecode(response.data);
+      // return jsonDecode(response.data);
+      return response.data;
     } on FormatException catch (_) {
-      Log.console('Unable to process the data', where: 'POST $baseUrl$uri', level: LogLevel.error);
+      Log.console('Unable to process the data',
+          where: 'POST $baseUrl$uri', level: LogLevel.error);
       throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
@@ -134,9 +154,11 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return jsonDecode(response.data);
+      // return jsonDecode(response.data);
+      return response.data;
     } on FormatException catch (_) {
-      Log.console('Unable to process the data', where: 'PATCH $baseUrl$uri', level: LogLevel.error);
+      Log.console('Unable to process the data',
+          where: 'PATCH $baseUrl$uri', level: LogLevel.error);
       throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
@@ -162,9 +184,11 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return jsonDecode(response.data);
+      // return jsonDecode(response.data);
+      return response.data;
     } on FormatException catch (_) {
-      Log.console('Unable to process the data', where: 'PUT $baseUrl$uri', level: LogLevel.error);
+      Log.console('Unable to process the data',
+          where: 'PUT $baseUrl$uri', level: LogLevel.error);
       throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
@@ -186,9 +210,11 @@ class DioClient {
         options: options,
         cancelToken: cancelToken,
       );
-      return jsonDecode(response.data);
+      // return jsonDecode(response.data);
+      return response.data;
     } on FormatException catch (_) {
-      Log.console('Unable to process the data', where: 'DELETE $baseUrl$uri', level: LogLevel.error);
+      Log.console('Unable to process the data',
+          where: 'DELETE $baseUrl$uri', level: LogLevel.error);
       throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
@@ -200,17 +226,18 @@ class LoggingInterceptor extends Interceptor {
   LoggingInterceptor();
 
   @override
-  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    options.extra['start_time'] = DateTime.now().millisecondsSinceEpoch;
+  Future onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    // options.extra['start_time'] = DateTime.now().millisecondsSinceEpoch;
 
-    var msg = 'URI: ${options.uri}\n';
-    msg += 'METHOD: ${options.method}\n';
-    msg += 'HEADERS: ${options.headers}\n';
-    if (options.data != null) {
-      msg += 'BODY: ${options.data}';
-    }
+    // var msg = 'URI: ${options.uri}\n';
+    // msg += 'METHOD: ${options.method}\n';
+    // msg += 'HEADERS: ${options.headers}\n';
+    // if (options.data != null) {
+    //   msg += 'BODY: ${options.data}';
+    // }
 
-    Log.console(msg, where: 'REQUEST', level: LogLevel.info);
+    // Log.console(msg, where: 'REQUEST', level: LogLevel.info);
 
     return handler.next(options);
   }
@@ -218,29 +245,29 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onError(err, ErrorInterceptorHandler handler) {
     // Error when send reqest to server
-    var msg = 'URI: ${err.requestOptions.uri}\n';
-    msg += 'METHOD: ${err.requestOptions.method}\n';
-    msg += 'REQUEST HEADER: ${err.requestOptions.headers}\n';
-    if (err.response != null) {
-      msg += 'STATUS CODE: ${err.response?.statusCode}\n';
-      msg += 'BODY: ${err.response?.data.toString() ?? ''}\n';
-    }
-    msg += 'ERROR: ${err.toString()}';
+    // var msg = 'URI: ${err.requestOptions.uri}\n';
+    // msg += 'METHOD: ${err.requestOptions.method}\n';
+    // msg += 'REQUEST HEADER: ${err.requestOptions.headers}\n';
+    // if (err.response != null) {
+    //   msg += 'STATUS CODE: ${err.response?.statusCode}\n';
+    //   msg += 'BODY: ${err.response?.data.toString() ?? ''}\n';
+    // }
+    // msg += 'ERROR: ${err.toString()}';
 
-    Log.console(msg, where: 'ERROR WHEN SEND REQUEST', level: LogLevel.error);
+    // Log.console(msg, where: 'ERROR WHEN SEND REQUEST', level: LogLevel.error);
 
     return handler.next(err);
   }
 
   @override
   Future onResponse(response, ResponseInterceptorHandler handler) async {
-    var msg = 'URI: ${response.requestOptions.uri}\n';
-    msg += 'METHOD: ${response.requestOptions.method}\n';
-    msg += 'REQUEST HEADER: ${response.requestOptions.headers}\n';
-    msg += 'STATUS CODE: ${response.statusCode}\n';
-    msg += 'BODY: ${response.data.toString()}';
+    // var msg = 'URI: ${response.requestOptions.uri}\n';
+    // msg += 'METHOD: ${response.requestOptions.method}\n';
+    // msg += 'REQUEST HEADER: ${response.requestOptions.headers}\n';
+    // msg += 'STATUS CODE: ${response.statusCode}\n';
+    // msg += 'BODY: ${response.data.toString()}';
 
-    Log.console(msg, where: 'RESPONSE', level: LogLevel.info);
+    // Log.console(msg, where: 'RESPONSE', level: LogLevel.info);
 
     return handler.next(response);
   }

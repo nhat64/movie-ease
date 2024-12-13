@@ -12,7 +12,7 @@ class CinemaRepository extends BaseRepository {
   CinemaRepository()
       : super(
           baseUrl: AppStrings.baseUrl,
-          token: LocalStorage.getString(SharedPreferencesKeys.accessToken),
+          token: LocalStorage.getString(LocalStorageKeys.accessToken),
         );
 
   Future<ApiResult> getCinemas() async {

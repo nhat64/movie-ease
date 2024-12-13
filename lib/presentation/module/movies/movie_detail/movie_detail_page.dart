@@ -2,7 +2,6 @@ import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
-import 'package:base_flutter/app/utils/time_convert.dart';
 import 'package:base_flutter/presentation/module/movies/movie_detail/movie_detail_controller.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:base_flutter/presentation/widgets/read_more.dart';
@@ -18,12 +17,6 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
 
   @override
   bool get wrapWithSafeArea => true;
-
-  @override
-  bool get setTopSafeArea => false;
-
-  @override
-  bool get setBottomSafeArea => true;
 
   @override
   bool get extendBodyBehindAppBar => true;
@@ -42,6 +35,19 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
       ),
     );
   }
+
+  // @override
+  // Widget buildScreen(BuildContext context) {
+  //   return SingleChildScrollView(
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget buildScreen(BuildContext context) {
@@ -70,7 +76,8 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                       height: MediaQuery.of(context).size.height * 0.4,
                       child: Image.network(
                         controller.movie.poster,
-                        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                        errorBuilder: (context, error, stackTrace) =>
+                            const SizedBox.shrink(),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -87,7 +94,8 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              Get.toNamed(RouteName.playTrailers, arguments: controller.movie.trailerUrl);
+                              Get.toNamed(RouteName.playTrailers,
+                                  arguments: controller.movie.trailerUrl);
                             },
                             behavior: HitTestBehavior.opaque,
                             child: SvgPicture.asset(
@@ -102,7 +110,8 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
+                  padding:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -112,7 +121,11 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                           Expanded(
                             child: Text(
                               controller.movie.name,
-                              style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600, height: 1),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -122,21 +135,29 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                       const SizedBox(height: 10),
                       Text(
                         controller.movie.director,
-                        style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+                        style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        formatDurationToMinuteWord(controller.movie.duration),
-                        style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+                        '${controller.movie.durationMinute} phút',
+                        style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
                         height: 32,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) => _buildtag(controller.movie.movieGenre[index]),
-                          separatorBuilder: (context, index) => const SizedBox(width: 8),
-                          itemCount: controller.movie.movieGenre.length,
+                          itemBuilder: (context, index) =>
+                              _buildtag(controller.movie.genre[index].name),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(width: 8),
+                          itemCount: controller.movie.genre.length,
                           shrinkWrap: true,
                         ),
                       ),
@@ -147,9 +168,18 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
                         trimLines: 3,
                         trimCollapsedText: 'Show more',
                         trimExpandedText: 'Show less',
-                        style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
-                        lessStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.yellowFCC434),
-                        moreStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.yellowFCC434),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                        lessStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.yellowFCC434),
+                        moreStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.yellowFCC434),
                       ),
                     ],
                   ),
@@ -183,7 +213,8 @@ class MovieDetailPage extends BaseScreen<MovieDetailController> {
             child: ScaleButton(
               onTap: () {},
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   color: AppColors.yellowFCC434,
                   borderRadius: BorderRadius.circular(14),
