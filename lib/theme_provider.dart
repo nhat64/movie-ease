@@ -8,14 +8,17 @@ class ThemeProvider with ChangeNotifier {
   bool get isDarkMode => mode == ThemeMode.dark;
 
   ThemeProvider() {
-    mode = LocalStorage.getBool(SharedPreferencesKeys.darkMode) ?? true ? ThemeMode.dark : ThemeMode.light;
-    locale = _convertStringToLocale(LocalStorage.getString(SharedPreferencesKeys.locale) ?? 'en');
+    mode = LocalStorage.getBool(LocalStorageKeys.darkMode) ?? true
+        ? ThemeMode.dark
+        : ThemeMode.light;
+    locale = _convertStringToLocale(
+        LocalStorage.getString(LocalStorageKeys.locale) ?? 'en');
   }
 
   void setThemeMode(ThemeMode mode) {
     if (this.mode == mode) return;
     LocalStorage.setBool(
-      SharedPreferencesKeys.darkMode,
+      LocalStorageKeys.darkMode,
       mode == ThemeMode.dark,
     );
     this.mode = mode;
@@ -26,7 +29,7 @@ class ThemeProvider with ChangeNotifier {
     // only save the locale to local storage
     // why not setLocele/notifyListenrs() ? because EasyLocalization will handle it by setLocale(Locale locale) func, we just need to save it
     // so let call this function affter: await context.setLocale(const Locale('vi'));
-    LocalStorage.setString(SharedPreferencesKeys.locale, locale.toString());
+    LocalStorage.setString(LocalStorageKeys.locale, locale.toString());
   }
 
   /// Convert locale from string to Locale

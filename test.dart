@@ -89,7 +89,7 @@ List<SeatEntity> generateSeats(
 
     if (matrixValue == 1) {
       // Generate a random status (available or reserved)
-      final randomStatus = StatusSeat.values[new Random().nextInt(2)]; // 0 or 1
+      final randomStatus = StatusSeat.values[Random().nextInt(2)]; // 0 or 1
       seats.add(SeatEntity(
         id: idCounter++,
         code: '${rowToKey[row]}$col',

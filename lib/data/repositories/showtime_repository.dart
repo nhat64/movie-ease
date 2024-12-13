@@ -12,7 +12,7 @@ class ShowtimeRepository extends BaseRepository {
   ShowtimeRepository()
       : super(
           baseUrl: AppStrings.baseUrl,
-          token: LocalStorage.getString(SharedPreferencesKeys.accessToken),
+          token: LocalStorage.getString(LocalStorageKeys.accessToken),
         );
 
   Future<ApiResult> getShowtimes() async {
@@ -41,7 +41,8 @@ List<Map<String, dynamic>> listShowtime = [
   {
     "movie": {
       "id": 1,
-      "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-linhmieu.jpg",
+      "poster":
+          "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-linhmieu.jpg",
       "name": "LINH MIÊU",
       "date": "22-11-2024",
       "duration": 7200,
@@ -85,7 +86,8 @@ List<Map<String, dynamic>> listShowtime = [
   {
     "movie": {
       "id": 2,
-      "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/a/m/amazon-main-poster-printing.jpg",
+      "poster":
+          "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/a/m/amazon-main-poster-printing.jpg",
       "name": "CƯỜI XUYÊN BIÊN GIỚI",
       "date": "15-11-2024",
       "duration": 7200,

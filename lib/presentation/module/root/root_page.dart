@@ -50,23 +50,23 @@ class RootPage extends BaseScreen<RootController> {
   }
 
   Widget _buildStackPage() {
-    return Stack(
-      children: [
-        Obx(() {
-          return IndexedStack(
+    return Obx(() {
+      return Stack(
+        children: [
+          IndexedStack(
             index: controller.currentPageIndex.value,
             children: controller.listScreen,
-          );
-        }),
-        Positioned(
-          bottom: 0,
-          child: CinemaBottomNav(
-            key: controller.bottomNavKey,
-            onIndexChange: controller.onIndexNavChanged,
-            onNotchTap: controller.onAddTicket,
           ),
-        ),
-      ],
-    );
+          Positioned(
+            bottom: 0,
+            child: CinemaBottomNav(
+              currentIndex: controller.currentPageIndex.value,
+              onIndexChange: controller.onIndexNavChanged,
+              onNotchTap: controller.onAddTicket,
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

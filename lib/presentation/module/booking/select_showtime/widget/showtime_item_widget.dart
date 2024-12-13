@@ -44,7 +44,7 @@ class ShowtimeItemWidget extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Text(
+            const Text(
               '13:30-15:50',
               style: TextStyle(
                 color: AppColors.yellowFCC434,
@@ -53,9 +53,9 @@ class ShowtimeItemWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 2),
-            Text(
+            const Text(
               '50/70 Ghế',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,

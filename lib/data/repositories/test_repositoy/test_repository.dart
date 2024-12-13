@@ -14,7 +14,7 @@ class TestRepository extends BaseRepository {
   TestRepository()
       : super(
           baseUrl: AppStrings.baseUrl,
-          token: LocalStorage.getString(SharedPreferencesKeys.accessToken),
+          token: LocalStorage.getString(LocalStorageKeys.accessToken),
         );
 
   Future<ApiResult> testFunc() async {

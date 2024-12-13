@@ -3,7 +3,6 @@ import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/presentation/module/home/home_page.dart';
 import 'package:base_flutter/presentation/module/popcorn/popcorn_page.dart';
 import 'package:base_flutter/presentation/module/profile/profile_page.dart';
-import 'package:base_flutter/presentation/module/root/widget/cinema_bottom_nav.dart';
 import 'package:base_flutter/presentation/module/voucher/voucher_page.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +17,6 @@ class MenuOption {
 
 class RootController extends BaseController with GetSingleTickerProviderStateMixin {
   RootController();
-
-  final GlobalKey<CinemaBottomNavState> bottomNavKey = GlobalKey<CinemaBottomNavState>();
 
   List<MenuOption> listOption = [
     MenuOption(title: 'Vé', iconPath: SvgPaths.icMyTicket),
