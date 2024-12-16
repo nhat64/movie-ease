@@ -54,6 +54,8 @@ class SvgPaths {
   static const String icGiftSelected = '$_basePath/ic_gift_selected.svg';
   static const String icPopcorn = '$_basePath/ic_popcorn.svg';
   static const String icPopcornSelected = '$_basePath/ic_popcorn_selected.svg';
+
+  static const String icChange = '$_basePath/ic_change.svg';
 }
 
 class ImagePaths {
@@ -72,4 +74,6 @@ class ImagePaths {
 
   static const String imgMomo = '$_basePath/img_momo.png';
   static const String imgZalopay = '$_basePath/img_zalopay.png';
+
+  static const String imgBannerVoucher = '$_basePath/banner_voucher.png';
 }

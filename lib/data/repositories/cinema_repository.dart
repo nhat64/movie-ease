@@ -5,7 +5,8 @@ import 'package:base_flutter/app/base/mvvm/model/source/network/base_response.da
 import 'package:base_flutter/app/constans/app_strings.dart';
 
 abstract class MoviePath {
-  static const String getCinemas = '';
+  static const String getCinemas = '/api/app/cinema/get-list';
+  static const String getCinemasLocation = '/api/app/cinema/location';
 }
 
 class CinemaRepository extends BaseRepository {
@@ -15,9 +16,20 @@ class CinemaRepository extends BaseRepository {
           token: LocalStorage.getString(LocalStorageKeys.accessToken),
         );
 
-  Future<ApiResult> getCinemas() async {
+  Future<ApiResult> getCinemas({
+    double? latitude,
+    double? longitude,
+  }) async {
     try {
-      final rs = await dioClient.get(MoviePath.getCinemas);
+      final rs = await dioClient.get(
+        (latitude != null && longitude != null) ? MoviePath.getCinemasLocation : MoviePath.getCinemas,
+        queryParameters: (latitude != null && longitude != null)
+            ? {
+                'latitude': latitude,
+                'longitude': longitude,
+              }
+            : null,
+      );
 
       return ApiResult.apiSuccess(BaseResponse.fromJson(rs));
     } on Exception catch (e) {
@@ -41,7 +53,6 @@ List<dynamic> listCinema = [
     "id": 1,
     "name": "CinemaEase Hà Đông",
     "address": "Số 10 - Trần Phú - Hà Đông - Hà Nội",
-    "created_at": "2024-10-20T14:11:39.000000Z",
-    "updated_at": "2024-10-20T14:11:39.000000Z",
+    "distance": "1.2 km",
   }
 ];

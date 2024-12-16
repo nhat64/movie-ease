@@ -4,11 +4,7 @@ import 'package:get/get.dart';
 class CallApiWidget {
   static OverlayEntry? _overlayEntry;
 
-  static Future<dynamic> checkTimeCallApi(
-      {required Future<dynamic> api,
-      required BuildContext context,
-      child,
-      isShowLoading = true}) async {
+  static Future<dynamic> checkTimeCallApi({required Future<dynamic> api, required BuildContext context, child, isShowLoading = true}) async {
     if (isShowLoading) {
       createHighlightOverlay(context: context, child: child);
     }
@@ -48,14 +44,7 @@ class CallApiWidget {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: child ??
-                    const SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgressIndicator(
-                        color: Color(0xFFFCC434),
-                      ),
-                    ),
+                child: child ?? const CicularLoadingWidget(),
               ),
             ),
             onTap: () {},
@@ -65,5 +54,20 @@ class CallApiWidget {
     );
 
     overlayState.insert(_overlayEntry!);
+  }
+}
+
+class CicularLoadingWidget extends StatelessWidget {
+  const CicularLoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: 40,
+      height: 40,
+      child: CircularProgressIndicator(
+        color: Color(0xFFFCC434),
+      ),
+    );
   }
 }

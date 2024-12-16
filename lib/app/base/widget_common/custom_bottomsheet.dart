@@ -21,6 +21,7 @@ Future<T?> showCustomModalBottomSheet<T>({
             topRight: Radius.circular(16),
           ),
         ),
+        width: MediaQuery.of(context).size.width,
         clipBehavior: Clip.antiAlias,
         child: child,
       );

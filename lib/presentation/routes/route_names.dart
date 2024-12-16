@@ -6,9 +6,14 @@ class RouteName {
   static const selectSeats = '/selectSeats';
   static const selectCinema = '/selectCinema';
   static const selectShowtime = '/selectShowtime';
+  static const selectPopcorn = '/selectPopcorn';
   static const payment = '/payment';
   static const searchMovie = '/searchMovie';
   static const login = '/login';
   static const register = '/register';
   static const myTicket = '/myTicket';
+  static const changePass = '/changePass';
+  static const forgot = '/forgot';
+  static const voucherDetail = '/voucherDetail';
+  static const cinemaDetail = '/cinemaDetail';
 }

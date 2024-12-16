@@ -1,5 +1,6 @@
+import 'package:base_flutter/data/repositories/promotion_repository.dart';
 import 'package:base_flutter/presentation/module/home/home_controller.dart';
-import 'package:base_flutter/presentation/module/popcorn/popcorn_controller.dart';
+import 'package:base_flutter/presentation/module/list_cinema/list_cinema_controller.dart';
 import 'package:base_flutter/presentation/module/profile/profile_controller.dart';
 import 'package:base_flutter/presentation/module/root/root_controller.dart';
 import 'package:base_flutter/presentation/module/voucher/voucher_controller.dart';
@@ -8,10 +9,12 @@ import 'package:get/get.dart';
 class RootBinding extends Bindings {
   @override
   void dependencies() {
+    Get.lazyPut(() => PromotionRepository());
+
     Get.put(HomeController());
     Get.put(RootController());
     Get.put(ProfileController());
-    Get.put(PopcornController());
+    Get.put(ListCinemaController());
     Get.put(VoucherController());
   }
 }

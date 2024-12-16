@@ -1,5 +1,5 @@
 import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
-import 'package:base_flutter/data/entity/group_showtime_entity.dart';
+import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/data/page_data/select_seats_page_data.dart';
 import 'package:base_flutter/presentation/module/booking/select_showtime/select_showtime_controller.dart';
 import 'package:base_flutter/presentation/module/booking/select_showtime/widget/showtime_item_widget.dart';
@@ -68,7 +68,7 @@ class SelectShowtimePage extends BaseScreen<SelectShowtimeController> {
                     time: time,
                     isSelected: time.day == controller.selectedTime.value.day,
                     onTap: () {
-                      controller.selectedTime.value = time;
+                      controller.onSelectdTime(time);
                     },
                   ),
                 ),
@@ -86,9 +86,9 @@ class SelectShowtimePage extends BaseScreen<SelectShowtimeController> {
         () => Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: controller.listGroupShowtime
+          children: controller.movieShowtime
               .map(
-                (element) => _buildGroupShowtime(groupShowtime: element),
+                (element) => _buildGroupShowtime(movieShowtime: element),
               )
               .toList(),
         ),
@@ -97,7 +97,7 @@ class SelectShowtimePage extends BaseScreen<SelectShowtimeController> {
   }
 
   Widget _buildGroupShowtime({
-    required GroupShowtimeEntity groupShowtime,
+    required MovieEntity movieShowtime,
   }) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -106,7 +106,7 @@ class SelectShowtimePage extends BaseScreen<SelectShowtimeController> {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            groupShowtime.movie.name,
+            movieShowtime.name,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -125,7 +125,7 @@ class SelectShowtimePage extends BaseScreen<SelectShowtimeController> {
             return Wrap(
               spacing: space,
               runSpacing: space,
-              children: groupShowtime.showtime
+              children: movieShowtime.showtime
                   .map(
                     (e) => ShowtimeItemWidget(
                       showtime: e,
@@ -135,7 +135,7 @@ class SelectShowtimePage extends BaseScreen<SelectShowtimeController> {
                         Get.toNamed(
                           RouteName.selectSeats,
                           arguments: SelectSeatsPageData(
-                            movie: groupShowtime.movie,
+                            movie: movieShowtime,
                             showtime: e,
                             cinema: controller.pageData.cinema,
                           ),

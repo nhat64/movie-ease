@@ -1,6 +1,8 @@
 import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:base_flutter/app/base/mvvm/view_model/base_controller.dart';
-import 'package:base_flutter/data/entity/group_showtime_entity.dart';
+import 'package:base_flutter/app/base/widget_common/call_api_widget.dart';
+import 'package:base_flutter/app/utils/time_convert.dart';
+import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/data/page_data/select_showtime_page_data.dart';
 import 'package:base_flutter/data/repositories/showtime_repository.dart';
 import 'package:get/get.dart';
@@ -10,9 +12,9 @@ class SelectShowtimeController extends BaseController {
 
   SelectShowtimeController({required this.pageData});
 
-  final ShowtimeRepository _showtimeRepository = ShowtimeRepository();
+  final _showtimeRepository = Get.find<ShowtimeRepository>();
 
-  // 2 tuần kể từ hiện tại
+  // 1 tuần kể từ hiện tại
   final List<DateTime> timeItems = List<DateTime>.generate(
     7,
     (index) {
@@ -26,22 +28,34 @@ class SelectShowtimeController extends BaseController {
 
   Rx<DateTime> selectedTime = Rx<DateTime>(DateTime.now());
 
-  RxList<GroupShowtimeEntity> listGroupShowtime = <GroupShowtimeEntity>[].obs;
+  RxList<MovieEntity> movieShowtime = <MovieEntity>[].obs;
 
   @override
-  onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
     _fetchShowtime(dateTime: selectedTime.value);
   }
 
-  _fetchShowtime({required DateTime dateTime}) async {
-    listGroupShowtime.value = [];
+  onSelectdTime(DateTime time) {
+    selectedTime.value = time;
+    _fetchShowtime(dateTime: time);
+  }
 
-    final result = await _showtimeRepository.getShowtimesFake();
+  _fetchShowtime({required DateTime dateTime}) async {
+    movieShowtime.value = [];
+
+    final result = await CallApiWidget.checkTimeCallApi(
+      api: _showtimeRepository.getShowtimes(
+        movieId: pageData.movie?.id,
+        cinemaId: pageData.cinema.id,
+        date: convertDateToYYYYMMDD(dateTime),
+      ),
+      context: Get.context!,
+    );
 
     result.when(
       apiSuccess: (res) {
-        listGroupShowtime.value = (res.data as List).map((e) => GroupShowtimeEntity.fromJson(e)).toList();
+        movieShowtime.value = (res.data as List).map((e) => MovieEntity.fromJson(e)).toList();
       },
       apiFailure: (error) {
         Log.console(error);

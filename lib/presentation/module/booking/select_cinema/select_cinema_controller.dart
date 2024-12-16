@@ -1,4 +1,5 @@
 import 'package:base_flutter/app/base/helper/log.dart';
+import 'package:base_flutter/app/base/mvvm/model/source/network/api_result.dart';
 import 'package:base_flutter/app/base/mvvm/view_model/base_controller.dart';
 import 'package:base_flutter/data/entity/cinema_entity.dart';
 import 'package:base_flutter/data/page_data/select_cinema_page_data.dart';
@@ -15,13 +16,22 @@ class SelectCinemaController extends BaseController {
   RxList<CinemaEntity> cinemas = <CinemaEntity>[].obs;
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
     _fetchCinemas();
   }
 
   _fetchCinemas() async {
-    final rs = await _cinemaRepository.getCinemasFake();
+    loading.value = true;
+
+    if (appProvider.position.value == null) {
+      await appProvider.determinePosition();
+    }
+
+    final ApiResult rs = await _cinemaRepository.getCinemas(
+      latitude: appProvider.position.value?.latitude,
+      longitude: appProvider.position.value?.longitude,
+    );
 
     List<CinemaEntity> tmpCinemas = [];
 
@@ -35,6 +45,6 @@ class SelectCinemaController extends BaseController {
       },
     );
 
-    return tmpCinemas;
+    loading.value = false;
   }
 }

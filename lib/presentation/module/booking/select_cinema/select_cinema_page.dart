@@ -1,6 +1,9 @@
 import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
+import 'package:base_flutter/app/base/widget_common/call_api_widget.dart';
+import 'package:base_flutter/data/page_data/select_showtime_page_data.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_controller.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/widget/cinema_item_widget.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,19 +37,76 @@ class SelectCinemaPage extends BaseScreen<SelectCinemaController> {
 
   @override
   Widget buildScreen(BuildContext context) {
-    return Obx(() {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView.separated(
-          shrinkWrap: true,
-          itemCount: controller.cinemas.length,
-          itemBuilder: (context, index) {
-            final cinema = controller.cinemas[index];
-            return CinemaItemWidget(cinema: cinema);
-          },
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-        ),
-      );
-    });
+    return Obx(
+      () {
+        if (controller.loading.value) {
+          return const Center(
+            child: CicularLoadingWidget(),
+          );
+        }
+
+        final listCinema = controller.cinemas;
+        final position = controller.appProvider.position.value;
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (listCinema.isNotEmpty && position != null) ...[
+                  const Text(
+                    'Rạp gần nhất',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  CinemaItemWidget(
+                    cinema: listCinema.first,
+                    onTap: () {
+                      Get.toNamed(
+                        RouteName.selectShowtime,
+                        arguments: SelectShowtimePageData(cinema: listCinema.first),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
+                const Text(
+                  'Tất cả rạp',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: listCinema.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final cinema = listCinema[index];
+                    return CinemaItemWidget(
+                      cinema: cinema,
+                      onTap: () {
+                        Get.toNamed(
+                          RouteName.selectShowtime,
+                          arguments: SelectShowtimePageData(cinema: cinema),
+                        );
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(height: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

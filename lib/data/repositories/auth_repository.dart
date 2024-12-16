@@ -7,6 +7,7 @@ import 'package:base_flutter/app/constans/app_strings.dart';
 abstract class AuthPath {
   static const String login = '/api/app/auth/login';
   static const String register = '/api/app/auth/register';
+  static const String forgot = '/api/app/forgot-password';
 }
 
 class AuthRepository extends BaseRepository {
@@ -45,6 +46,18 @@ class AuthRepository extends BaseRepository {
         "phone_number": phone,
         "username": username,
         "password": pass,
+      });
+
+      return ApiResult.apiSuccess(BaseResponse.fromJson(rs));
+    } on Exception catch (e) {
+      return ApiResult.apiFailure(e);
+    }
+  }
+
+  Future<ApiResult> forgot({required String email}) async {
+    try {
+      final rs = await dioClient.post(AuthPath.forgot, data: {
+        "email": email,
       });
 
       return ApiResult.apiSuccess(BaseResponse.fromJson(rs));

@@ -107,12 +107,29 @@ class LoginPage extends BaseScreen<LoginController> {
                 ],
               );
             }),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(RouteName.forgot);
+                  },
+                  child: const Text(
+                    "Quên mật khẩu",
+                    style: TextStyle(
+                      color: AppColors.yellowFCC434,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
             ScaleButton(
-              onTap: controller.callLogin,
+              onTap: controller.onLogin,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: BoxDecoration(
                   color: AppColors.yellowFCC434,
                   borderRadius: BorderRadius.circular(8),

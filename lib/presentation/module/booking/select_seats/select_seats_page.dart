@@ -2,9 +2,11 @@ import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
-import 'package:base_flutter/data/page_data/payment_page_data.dart';
+import 'package:base_flutter/app/utils/caculator_book.dart';
+import 'package:base_flutter/data/entity/seat_entity.dart';
+import 'package:base_flutter/data/page_data/select_popcorn_data.dart';
 import 'package:base_flutter/presentation/module/booking/select_seats/select_seats_controller.dart';
-import 'package:base_flutter/presentation/module/booking/select_seats/widget/money_text_widget.dart';
+import 'package:base_flutter/presentation/widgets/money_text_widget.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +23,13 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
+      title: Text(controller.pageData.showtime.name ?? ''),
+      centerTitle: true,
+      titleTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         onPressed: () {
@@ -46,99 +55,126 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
   }
 
   Widget _buildBody(BuildContext context) {
-    const int rowCount = 10;
-    const int columnCount = 15;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Obx(
+          () {
+            if (controller.matrixSeat.isEmpty) {
+              return const SizedBox();
+            }
 
-    const double paddingHorizontalSeats = 30;
-    const double gapColumnSeats = 10;
-    const double gapRowSeats = 10;
-    const double sizeSeat = 25;
+            int rowCount = controller.matrixSeat.length;
+            int columnCount = controller.matrixSeat.first.length;
 
-    return LayoutBuilder(builder: (context, constraints) {
-      return InteractiveViewer(
-        transformationController: controller.transformationController,
-        constrained: false,
-        panEnabled: true,
-        scaleEnabled: true,
-        panAxis: PanAxis.free,
-        boundaryMargin: EdgeInsets.zero,
-        minScale: 1,
-        maxScale: 5.0,
-        child: Container(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
-            minWidth: constraints.maxWidth,
-          ),
-          alignment: Alignment.topCenter,
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: IntrinsicWidth(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 30),
-                _bulildScreenMovie(
-                  context,
-                  width: columnCount * sizeSeat + (columnCount - 1) * gapColumnSeats + 2 * paddingHorizontalSeats,
-                  height: 65,
+            const double gapColumnSeats = 10;
+            const double gapRowSeats = 10;
+            const double sizeSeat = 25;
+
+            const double paddingHorizontalSeats = 30;
+
+            return InteractiveViewer(
+              transformationController: controller.transformationController,
+              constrained: false,
+              panEnabled: true,
+              scaleEnabled: true,
+              panAxis: PanAxis.free,
+              boundaryMargin: EdgeInsets.zero,
+              minScale: 1,
+              maxScale: 5.0,
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                  minWidth: constraints.maxWidth,
                 ),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: paddingHorizontalSeats),
-                  child: Obx(
-                    () {
-                      List<SeatEntity> listSelected = controller.selectedSeats;
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          for (int i = 0; i < rowCount; i++) ...[
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                for (int j = 0; j < columnCount; j++) ...[
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () {
-                                      final SeatEntity seatEntity = controller.matrixSeatEntities[i][j];
-                                      if ((seatEntity.status?.value ?? StatusSeat.none.value) == StatusSeat.available.value && seatEntity.id != null) {
-                                        controller.onSelect(seatEntity);
-                                        Log.console('onSelect: ${seatEntity.id}');
-                                      }
-                                    },
-                                    child: _buildSeat(
-                                      id: controller.matrixSeatEntities[i][j].id,
-                                      title: controller.matrixSeats[i][j] == 0 ? "" : controller.matrixSeatEntities[i][j].code,
-                                      isSelected: listSelected.contains(controller.matrixSeatEntities[i][j]),
-                                      statusSeatValue: controller.matrixSeatEntities[i][j].status?.value,
-                                      typeSeatValue: controller.matrixSeatEntities[i][j].type?.value,
-                                      size: sizeSeat,
-                                    ),
-                                  ),
-                                  if (i != columnCount - 1) const SizedBox(width: gapColumnSeats),
-                                ],
-                              ],
-                            ),
-                            if (i != rowCount - 1) const SizedBox(height: gapRowSeats),
-                          ],
-                        ],
-                      );
-                    },
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: IntrinsicWidth(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 30),
+                      _bulildScreenMovie(
+                        context,
+                        width: columnCount * sizeSeat + (columnCount - 1) * gapColumnSeats + 2 * paddingHorizontalSeats,
+                        height: 65,
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: paddingHorizontalSeats),
+                        child: _buildMatrixSeat(
+                          rowCount: rowCount,
+                          columnCount: columnCount,
+                          gapColumnSeats: gapColumnSeats,
+                          gapRowSeats: gapRowSeats,
+                          sizeSeat: sizeSeat,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      _buildNoteTypeSeats(),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 30),
-                _buildNoteTypeSeats(),
-              ],
-            ),
-          ),
-        ),
-      );
-    });
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
-  _buildNoteTypeSeats() {
+  Widget _buildMatrixSeat({
+    required int rowCount,
+    required int columnCount,
+    required double gapColumnSeats,
+    required double gapRowSeats,
+    required double sizeSeat,
+  }) {
+    return Obx(
+      () {
+        List<SeatEntity> listSelected = controller.selectedSeats;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (int i = 0; i < rowCount; i++) ...[
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (int j = 0; j < columnCount; j++) ...[
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        final SeatEntity seatEntity = controller.matrixSeat[i][j];
+                        if (seatEntity.id != null && (seatEntity.status ?? StatusSeat.none.value) == StatusSeat.available.value) {
+                          controller.onSelect(seatEntity);
+                          Log.console('onSelect: ${seatEntity.id}');
+                        }
+                      },
+                      child: _buildSeat(
+                        id: controller.matrixSeat[i][j].id,
+                        title: controller.matrixSeat[i][j].code,
+                        isSelected: listSelected.contains(controller.matrixSeat[i][j]),
+                        statusSeatValue: controller.matrixSeat[i][j].status,
+                        typeSeatValue: controller.matrixSeat[i][j].type,
+                        size: sizeSeat,
+                      ),
+                    ),
+                    if (i != columnCount - 1) SizedBox(width: gapColumnSeats),
+                  ],
+                ],
+              ),
+              if (i != rowCount - 1) SizedBox(height: gapRowSeats),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildNoteTypeSeats() {
     buildRowNote(String title, Color color) {
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -189,7 +225,7 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
     );
   }
 
-  _buildSeat({
+  Widget _buildSeat({
     required int? id,
     required String? title,
     required bool isSelected,
@@ -304,7 +340,7 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
     );
   }
 
-  _buildBottomSelected(BuildContext context) {
+  Widget _buildBottomSelected(BuildContext context) {
     return AnimatedBuilder(
       animation: controller.animationShowPriceController,
       builder: (context, child) {
@@ -375,7 +411,7 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
                           ),
                           const SizedBox(width: 5),
                           MoneyTextWidget(
-                            money: caculatePrice(controller.selectedSeats),
+                            money: caculatePrice(listSelected:  controller.selectedSeats),
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -399,8 +435,8 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
             ScaleButton(
               onTap: () {
                 Get.toNamed(
-                  RouteName.payment,
-                  arguments: PaymentPageData(
+                  RouteName.selectPopcorn,
+                  arguments: SelectPopcornPageData(
                     selectedSeats: controller.selectedSeats,
                     movie: controller.pageData.movie,
                     cinema: controller.pageData.cinema,
@@ -428,18 +464,6 @@ class SelectSeatsPage extends BaseScreen<SelectSeatsController> {
         ),
       ),
     );
-  }
-
-  String joinSeatToText(List<SeatEntity> listSelected) {
-    return listSelected.reversed.map((e) => e.code).join(", ");
-  }
-
-  int caculatePrice(List<SeatEntity> listSelected) {
-    int price = 0;
-    for (final seat in listSelected) {
-      price += seat.price ?? 0;
-    }
-    return price;
   }
 }
 

@@ -37,9 +37,9 @@ class CinemaBottomNav extends StatelessWidget {
         icon: SvgPicture.asset(SvgPaths.icHome),
         iconSelected: SvgPicture.asset(SvgPaths.icHomeSelected)),
     CinemaBottomNavItem(
-        title: 'Bắp nước',
-        icon: SvgPicture.asset(SvgPaths.icPopcorn),
-        iconSelected: SvgPicture.asset(SvgPaths.icPopcornSelected)),
+        title: 'Rạp',
+        icon: SvgPicture.asset(SvgPaths.icVideo),
+        iconSelected: SvgPicture.asset(SvgPaths.icVideoSelected)),
     CinemaBottomNavItem(
         title: 'Khuyễn mãi',
         icon: SvgPicture.asset(SvgPaths.icGift),

@@ -143,8 +143,6 @@ class DrawerMenu extends StatelessWidget {
               onTap: () {
                 Get.toNamed(RouteName.login);
                 Get.find<RootController>().toggleDrawer();
-
-                // showLoginWarningDialog();
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),

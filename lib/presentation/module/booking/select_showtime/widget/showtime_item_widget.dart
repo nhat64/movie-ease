@@ -1,5 +1,5 @@
 import 'package:base_flutter/app/constans/app_colors.dart';
-import 'package:base_flutter/data/entity/showtime_entiry.dart';
+import 'package:base_flutter/data/entity/showtime_entity.dart';
 import 'package:flutter/material.dart';
 
 class ShowtimeItemWidget extends StatelessWidget {
@@ -44,18 +44,18 @@ class ShowtimeItemWidget extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const Text(
-              '13:30-15:50',
-              style: TextStyle(
+            Text(
+              '${showtime.startTime}-${showtime.endTime}',
+              style: const TextStyle(
                 color: AppColors.yellowFCC434,
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 2),
-            const Text(
-              '50/70 Ghế',
-              style: TextStyle(
+            Text(
+              '${showtime.seatCount ?? '0/0'} Ghế',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,

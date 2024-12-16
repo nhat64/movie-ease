@@ -72,10 +72,17 @@ class RegisterController extends BaseController {
     usernameController.dispose();
     passwordController.dispose();
     confirmController.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
 
     usernameFocusNode.dispose();
     passFocusNode.dispose();
     confirmFocusNode.dispose();
+    nameFocusNode.dispose();
+    emailFocusNode.dispose();
+    phoneFucusNode.dispose();
+
     super.dispose();
   }
 
@@ -102,7 +109,7 @@ class RegisterController extends BaseController {
 
           showSnackBar(
             title: 'Đăng ký',
-            message: 'Đăng knhatbg06042002í thành công!',
+            message: 'Đăng kí thành công!',
           );
         } else {
           final messError = RegisterMessageError.fromJson(res.message);

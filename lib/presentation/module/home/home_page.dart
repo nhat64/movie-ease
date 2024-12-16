@@ -52,8 +52,25 @@ class HomePage extends BaseScreen<HomeController> {
                 const SizedBox(height: 40),
                 _builAppbar(),
                 HomeTabBar(controller: controller),
-                Expanded(
-                  child: _buildSlide(),
+                Obx(
+                  () {
+                    if ((controller.appProvider.showingMovies.isEmpty && controller.isShowShowing.value == true) ||
+                        (controller.appProvider.comingMovies.isEmpty && controller.isShowShowing.value == false)) {
+                      return const SizedBox();
+                    }
+
+                    final bool isShowShowing = controller.isShowShowing.value;
+                    final int currentIndex = isShowShowing ? controller.currentShowingIndex.value : controller.currentComingIndex.value;
+                    final int indicatorCount = isShowShowing ? controller.appProvider.showingMovies.length : controller.appProvider.comingMovies.length;
+
+                    return Expanded(
+                      child: _buildSlide(
+                        isShowShowing: isShowShowing,
+                        currentIndex: currentIndex,
+                        indicatorCount: indicatorCount,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -63,45 +80,42 @@ class HomePage extends BaseScreen<HomeController> {
     );
   }
 
-  Widget _buildSlide() {
-    return Obx(
-      () {
-        final bool isShowShowing = controller.isShowShowing.value;
-        final int currentIndex = isShowShowing ? controller.currentShowingIndex.value : controller.currentComingIndex.value;
-        final int indicatorCount = isShowShowing ? controller.appProvider.showingMovies.length : controller.appProvider.comingMovies.length;
-        return LayoutBuilder(
-          builder: (context, constraints) => Column(
-            children: [
-              MovieSlideWidget(
-                movies: isShowShowing ? controller.appProvider.showingMovies : controller.appProvider.comingMovies,
-                pageController: isShowShowing ? controller.pageShowingControler : controller.pageComingControler,
-                height: constraints.maxHeight * 0.75,
-                onPageChanged: controller.onSlideChanged,
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.center,
-                child: IndicatorDots(
-                  currentIndex: currentIndex,
-                  indicatorCount: indicatorCount,
-                  indicatorSelectedWidth: 20,
-                  indicatorUnselectedWidth: 12,
-                  indicatorHeight: 4,
-                  indicatorSpace: 4,
-                  selectedDecoration: BoxDecoration(
-                    color: AppColors.yellowFCC434,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                  unselectedDecoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-            ],
+  Widget _buildSlide({
+    required bool isShowShowing,
+    required int currentIndex,
+    required int indicatorCount,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) => Column(
+        children: [
+          MovieSlideWidget(
+            movies: isShowShowing ? controller.appProvider.showingMovies : controller.appProvider.comingMovies,
+            pageController: isShowShowing ? controller.pageShowingControler : controller.pageComingControler,
+            height: constraints.maxHeight * 0.75,
+            onPageChanged: controller.onSlideChanged,
           ),
-        );
-      },
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.center,
+            child: IndicatorDots(
+              currentIndex: currentIndex,
+              indicatorCount: indicatorCount,
+              indicatorSelectedWidth: 20,
+              indicatorUnselectedWidth: 12,
+              indicatorHeight: 4,
+              indicatorSpace: 4,
+              selectedDecoration: BoxDecoration(
+                color: AppColors.yellowFCC434,
+                borderRadius: BorderRadius.circular(2),
+              ),
+              unselectedDecoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

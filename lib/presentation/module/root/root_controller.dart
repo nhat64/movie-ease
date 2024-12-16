@@ -1,10 +1,12 @@
 import 'package:base_flutter/app/base/mvvm/view_model/base_controller.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/presentation/module/home/home_page.dart';
-import 'package:base_flutter/presentation/module/popcorn/popcorn_page.dart';
+import 'package:base_flutter/presentation/module/list_cinema/list_cinema_page.dart';
+import 'package:base_flutter/presentation/module/booking/select_popcorn/popcorn_page.dart';
 import 'package:base_flutter/presentation/module/profile/profile_page.dart';
 import 'package:base_flutter/presentation/module/voucher/voucher_page.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
+import 'package:base_flutter/presentation/widgets/app_dialog/show_login_warning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +28,7 @@ class RootController extends BaseController with GetSingleTickerProviderStateMix
 
   final List<Widget> listScreen = [
     const HomePage(),
-    const PopcornPage(),
+    const ListCinemaPage(),
     const VoucherPage(),
     const ProfilePage(),
   ];
@@ -67,7 +69,18 @@ class RootController extends BaseController with GetSingleTickerProviderStateMix
     Get.toNamed(RouteName.selectCinema);
   }
 
-  onIndexNavChanged(int index) {
+  onIndexNavChanged(int index) async {
+    if (index == currentPageIndex.value) {
+      return;
+    }
+
+    if (index == 3 && appProvider.isAuth == false) {
+      final isLoginOk = await showShouldLoginDialog();
+      if (isLoginOk == false) {
+        return;
+      }
+    }
+
     currentPageIndex.value = index;
   }
 

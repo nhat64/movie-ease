@@ -57,24 +57,14 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
     return Obx(
       () {
         List<MovieEntity> listMovies = controller.indexSelected.value == 0
-            ? [
-                ...controller.appProvider.showingMovies,
-                ...controller.appProvider.comingMovies
-              ]
+            ? [...controller.appProvider.showingMovies, ...controller.appProvider.comingMovies]
             : controller.indexSelected.value == 1
                 ? controller.appProvider.showingMovies
                 : controller.appProvider.comingMovies;
 
         if (controller.textSearch.value.isNotEmpty) {
           listMovies = listMovies
-              .where((element) =>
-                  element.name
-                      .toLowerCase()
-                      .contains(controller.textSearch.toLowerCase()) ||
-                  element.genre
-                      .join('.')
-                      .toLowerCase()
-                      .contains(controller.textSearch.toLowerCase()))
+              .where((element) => element.name.toLowerCase().contains(controller.textSearch.toLowerCase()) || element.genre.join('.').toLowerCase().contains(controller.textSearch.toLowerCase()))
               .toList();
         }
 
@@ -149,8 +139,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
           ),
           Expanded(
             child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 16, top: 8, bottom: 8, right: 6),
+              padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8, right: 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -172,12 +161,12 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                   const SizedBox(height: 8),
                   buildInfoRow(
                     svgPath: SvgPaths.icClock,
-                    content: '$movie.durationMinute} phút',
+                    content: '${movie.durationMinute} phút',
                   ),
                   const SizedBox(height: 8),
                   buildInfoRow(
                     svgPath: SvgPaths.icMovie,
-                    content: movie.genre.join(', '),
+                    content: movie.genre.map((e) => e.name).join(', '),
                     maxLines: 2,
                   ),
                 ],
@@ -354,21 +343,15 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                               controller.onSelectedGenre(e);
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: listSelected.contains(e)
-                                    ? AppColors.yellowFCC434
-                                    : AppColors.neutral1C1C1C,
+                                color: listSelected.contains(e) ? AppColors.yellowFCC434 : AppColors.neutral1C1C1C,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
                                 e.name,
                                 style: TextStyle(
-                                  color:
-                                      controller.listGenreSelected.contains(e)
-                                          ? Colors.black
-                                          : Colors.white,
+                                  color: controller.listGenreSelected.contains(e) ? Colors.black : Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),

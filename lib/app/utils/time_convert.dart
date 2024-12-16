@@ -1,6 +1,11 @@
 import 'package:intl/intl.dart';
 
 
+String convertDateToYYYYMMDD(DateTime datetime) {
+  return DateFormat('yyyy-MM-dd').format(datetime);
+} 
+
+
 // convert giây thành giờ, phút, giây định dạng HH:mm:ss
 String convertSecondsToHMS(int seconds) {
   final Duration duration = Duration(seconds: seconds);
@@ -36,11 +41,4 @@ String simplifyFormattedTime(String timeString) {
   }
 
   return parts.join(':');
-}
-
-// convert giây thành phút với text đơn vị
-String formatDurationToMinuteWord(int seconds) {
-  Duration duration = Duration(seconds: seconds);
-  int minutes = duration.inMinutes;
-  return '$minutes phút';
 }

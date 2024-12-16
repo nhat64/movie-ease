@@ -5,22 +5,19 @@ part 'cinema_entity.g.dart';
 @JsonSerializable()
 class CinemaEntity {
   @JsonKey(name: 'id')
-  int? id;
+  final int id;
   @JsonKey(name: 'name')
-  String? name;
+  final String? name;
   @JsonKey(name: 'address')
-  String? address;
-  @JsonKey(name: 'created_at')
-  String? createdAt;
-  @JsonKey(name: 'updated_at')
-  String? updatedAt;
+  final String? address;
+  @JsonKey(name: 'distance')
+  final String? distance;
 
   CinemaEntity({
-    this.id,
+    required this.id,
     this.name,
     this.address,
-    this.createdAt,
-    this.updatedAt,
+    this.distance,
   });
 
   factory CinemaEntity.fromJson(Map<String, dynamic> json) => _$CinemaEntityFromJson(json);
