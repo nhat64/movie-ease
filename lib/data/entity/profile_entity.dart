@@ -9,7 +9,7 @@ class ProfileEntity {
   @JsonKey(name: 'account_id')
   final int accountId;
   final String name;
-  final int? age;
+  final String? age;
   @JsonKey(name: 'phone_number')
   final String phoneNumber;
   final String? avatar;

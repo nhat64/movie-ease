@@ -1,13 +1,27 @@
 import 'package:intl/intl.dart';
 
-
 String convertDateToYYYYMMDD(DateTime datetime) {
   return DateFormat('yyyy-MM-dd').format(datetime);
-} 
+}
 
+// convert giây thành giờ, phút, giây định dạng mm:ss
+String convertSecondsToMS(int seconds) {
+  if (seconds < 0) {
+    return '00:00';
+  }
+  final Duration duration = Duration(seconds: seconds);
+  final formatter = DateFormat('mm:ss');
+  String formattedTime = formatter.format(DateTime(0).add(duration));
+
+  return formattedTime;
+}
 
 // convert giây thành giờ, phút, giây định dạng HH:mm:ss
 String convertSecondsToHMS(int seconds) {
+  if (seconds < 0) {
+    return '00:00:00';
+  }
+
   final Duration duration = Duration(seconds: seconds);
   final formatter = DateFormat('HH:mm:ss');
   String formattedTime = formatter.format(DateTime(0).add(duration));

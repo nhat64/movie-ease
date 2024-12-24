@@ -8,6 +8,7 @@ import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/presentation/module/movies/movie_search/movie_search_controller.dart';
 import 'package:base_flutter/presentation/module/movies/widget/switch_bar.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -68,6 +69,16 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
               .toList();
         }
 
+        if (controller.listIdGenreSelected.isNotEmpty) {
+          listMovies = listMovies
+              .where(
+                (element) => element.genre.map((e) => e.id).any(
+                      (element) => controller.listIdGenreSelected.contains(element),
+                    ),
+              )
+              .toList();
+        }
+
         return Column(children: [
           ...listMovies.map<Widget>(
             (e) => Padding(
@@ -89,91 +100,93 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
       required String content,
       int maxLines = 1,
     }) {
-      return GestureDetector(
-        onTap: () {},
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ColoredIcon(
+            color: Colors.white,
+            height: 16,
+            width: 16,
+            child: SvgPicture.asset(svgPath),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              content,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+              ),
+              maxLines: maxLines,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(RouteName.movieDetail, arguments: movie);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.neutral1D1D1D,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        width: double.infinity,
+        clipBehavior: Clip.antiAlias,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ColoredIcon(
-              color: Colors.white,
-              height: 16,
-              width: 16,
-              child: SvgPicture.asset(svgPath),
+            SizedBox(
+              height: 160,
+              width: 120,
+              child: Image.network(
+                movie.poster,
+                fit: BoxFit.cover,
+              ),
             ),
-            const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                content,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8, right: 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      movie.name,
+                      style: const TextStyle(
+                        color: AppColors.yellowFCC434,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    buildInfoRow(
+                      svgPath: SvgPaths.icCalendar,
+                      content: movie.date,
+                    ),
+                    const SizedBox(height: 8),
+                    buildInfoRow(
+                      svgPath: SvgPaths.icClock,
+                      content: '${movie.durationMinute} phút',
+                    ),
+                    const SizedBox(height: 8),
+                    buildInfoRow(
+                      svgPath: SvgPaths.icMovie,
+                      content: movie.genre.map((e) => e.name).join(', '),
+                      maxLines: 2,
+                    ),
+                  ],
                 ),
-                maxLines: maxLines,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
         ),
-      );
-    }
-
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.neutral1D1D1D,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      width: double.infinity,
-      clipBehavior: Clip.antiAlias,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 160,
-            width: 120,
-            child: Image.network(
-              movie.poster,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8, right: 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    movie.name,
-                    style: const TextStyle(
-                      color: AppColors.yellowFCC434,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  buildInfoRow(
-                    svgPath: SvgPaths.icCalendar,
-                    content: movie.date,
-                  ),
-                  const SizedBox(height: 8),
-                  buildInfoRow(
-                    svgPath: SvgPaths.icClock,
-                    content: '${movie.durationMinute} phút',
-                  ),
-                  const SizedBox(height: 8),
-                  buildInfoRow(
-                    svgPath: SvgPaths.icMovie,
-                    content: movie.genre.map((e) => e.name).join(', '),
-                    maxLines: 2,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -298,10 +311,10 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.back();
+                    controller.onResetFilter();
                   },
                   child: const Icon(
-                    Icons.close,
+                    Icons.undo,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -332,7 +345,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                 const SizedBox(height: 16),
                 Obx(
                   () {
-                    final listSelected = controller.listGenreSelected;
+                    final listSelected = controller.listGenreSelectedTmp;
                     return Wrap(
                       spacing: 16,
                       runSpacing: 16,
@@ -351,7 +364,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
                               child: Text(
                                 e.name,
                                 style: TextStyle(
-                                  color: controller.listGenreSelected.contains(e) ? Colors.black : Colors.white,
+                                  color: controller.listGenreSelectedTmp.contains(e) ? Colors.black : Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -371,7 +384,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: ScaleButton(
               onTap: () {
-                Get.back();
+                controller.onFilter();
               },
               child: Container(
                 height: 40,

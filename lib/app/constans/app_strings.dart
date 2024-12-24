@@ -7,5 +7,5 @@ class AppStrings {
 
   // network
   // static const baseUrl = 'http://10.0.2.2:8000';
-  static const baseUrl = 'http://192.168.0.103:8000';
+  static const baseUrl = 'http://192.168.0.104:8000';
 }

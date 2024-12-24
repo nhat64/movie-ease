@@ -3,9 +3,7 @@ import 'package:base_flutter/app/base/widget_common/call_api_widget.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/app/utils/caculator_book.dart';
-import 'package:base_flutter/data/page_data/payment_page_data.dart';
 import 'package:base_flutter/presentation/module/booking/select_popcorn/popcorn_controller.dart';
-import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:base_flutter/presentation/widgets/money_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,15 +32,7 @@ class PopcornPage extends BaseScreen<PopcornController> {
           padding: const EdgeInsets.only(right: 12.0),
           child: InkWell(
             onTap: () {
-              Get.toNamed(
-                RouteName.payment,
-                arguments: PaymentPageData(
-                  selectedSeats: controller.pageData.selectedSeats,
-                  movie: controller.pageData.movie,
-                  cinema: controller.pageData.cinema,
-                  showtime: controller.pageData.showtime,
-                ),
-              );
+              controller.reservation();
             },
             child: const Text(
               "Bỏ qua",
@@ -306,15 +296,8 @@ class PopcornPage extends BaseScreen<PopcornController> {
             const SizedBox(width: 20),
             ScaleButton(
               onTap: () {
-                Get.toNamed(
-                  RouteName.payment,
-                  arguments: PaymentPageData(
-                    selectedSeats: controller.pageData.selectedSeats,
-                    movie: controller.pageData.movie,
-                    cinema: controller.pageData.cinema,
-                    showtime: controller.pageData.showtime,
-                    popcorns: controller.selectedPopcorn.value,
-                  ),
+                controller.reservation(
+                  popcorn: controller.selectedPopcorn.value,
                 );
               },
               child: Container(

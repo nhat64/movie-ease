@@ -5,8 +5,11 @@ import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/app/utils/caculator_book.dart';
+import 'package:base_flutter/app/utils/time_convert.dart';
 import 'package:base_flutter/presentation/module/booking/payment/payment_controller.dart';
 import 'package:base_flutter/presentation/module/booking/payment/widget/payment_menthod_item_widget.dart';
+import 'package:base_flutter/presentation/module/booking/select_seats/select_seats_controller.dart';
+import 'package:base_flutter/presentation/widgets/app_dialog/show_aler_dialog.dart';
 import 'package:base_flutter/presentation/widgets/money_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -460,11 +463,11 @@ class PaymentPage extends BaseScreen<PaymentController> {
       height: 170,
       child: Column(
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Thanh toán trong vòng',
                 style: TextStyle(
                   color: Colors.white,
@@ -472,14 +475,33 @@ class PaymentPage extends BaseScreen<PaymentController> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              Text(
-                '05:00',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              )
+              ValueListenableBuilder(
+                valueListenable: controller.timerCountdownService.currentSeconds,
+                builder: (_, value, __) {
+                  if (value == 0) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (timeStamp) {
+                        showAlerDialog(
+                          content: 'Hết thời gian thanh toán',
+                          onOk: () {
+                            Get.close(2);
+                            Get.find<SelectSeatsController>().selectedSeats.value = [];
+                            Get.find<SelectSeatsController>().onRefresh();
+                          },
+                        );
+                      },
+                    );
+                  }
+                  return Text(
+                    convertSecondsToMS(value),
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -523,25 +545,27 @@ class PaymentPage extends BaseScreen<PaymentController> {
             ],
           ),
           const SizedBox(height: 20),
-          ScaleButton(
-            onTap: () {},
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.yellowFCC434,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: const Text(
-                "Thanh toán",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+          Obx(() {
+            return ScaleButton(
+              onTap: controller.onPayment,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: controller.isWaitingPayment.value ? AppColors.neutral565656 : AppColors.yellowFCC434,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Text(
+                  controller.isWaitingPayment.value ? "Nhận lại link thanh toán" : "Thanh toán",
+                  style: TextStyle(
+                    color: controller.isWaitingPayment.value ? Colors.white : Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-          )
+            );
+          })
         ],
       ),
     );

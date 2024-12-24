@@ -10,7 +10,7 @@ class AccountEntity {
   final String username;
   final String email;
   @JsonKey(name: 'cinema_id')
-  final int? cinemaId;
+  final String? cinemaId;
   @JsonKey(name: 'device_token')
   final String? deviceToken;
   final int status;

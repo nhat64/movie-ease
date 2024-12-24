@@ -1,6 +1,7 @@
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/data/entity/movie_entity.dart';
+import 'package:base_flutter/data/page_data/select_cinema_page_data.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:base_flutter/presentation/widgets/ticket_widget.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,7 @@ class MovieSlideItemWidget extends StatelessWidget {
         borderRadius: 14,
         notchRadius: 20,
         stubHeight: 80,
-        backgroundColor:
-            offsetIndex.abs() <= 0.5 ? AppColors.yellowFCC434 : Colors.white,
+        backgroundColor: offsetIndex.abs() <= 0.5 ? AppColors.yellowFCC434 : Colors.white,
         contentWidget: _buildContent(),
         stubWidget: _buildStub(),
         onTap: () {
@@ -67,8 +67,7 @@ class MovieSlideItemWidget extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       child: Image.network(
                         movieItem.poster,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.error),
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -137,7 +136,7 @@ class MovieSlideItemWidget extends StatelessWidget {
           return ScaleButton(
             onTap: () {
               if (offsetIndex.abs() == 0) {
-                Get.toNamed(RouteName.selectCinema);
+                Get.toNamed(RouteName.selectCinema, arguments: SelectCinemaPageData(movie: movieItem));
               }
             },
             child: Container(

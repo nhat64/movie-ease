@@ -6,10 +6,12 @@ import 'package:get/get.dart';
 
 showAlerDialog({
   required String content,
+  VoidCallback? onOk,
 }) async {
   await showCustomDialog<bool>(
     context: Get.context!,
     backgroundColor: AppColors.black262626,
+    barrierDismissible: false,
     child: Container(
       padding: const EdgeInsets.all(16),
       width: Get.width * 0.8,
@@ -39,6 +41,9 @@ showAlerDialog({
           ScaleButton(
             onTap: () {
               Get.back();
+              Future.delayed(const Duration(milliseconds: 100), () {
+                onOk?.call();
+              });
             },
             child: Container(
               height: 40,

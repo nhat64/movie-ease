@@ -51,6 +51,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   url_launcher: ^6.3.1
   geolocator: ^13.0.2
+  app_links: ^6.3.3
   # only this app
 
 dev_dependencies:

@@ -3,7 +3,10 @@ import 'package:base_flutter/app/base/mvvm/model/source/network/api_result.dart'
 import 'package:base_flutter/app/base/mvvm/view_model/base_controller.dart';
 import 'package:base_flutter/data/entity/cinema_entity.dart';
 import 'package:base_flutter/data/page_data/select_cinema_page_data.dart';
+import 'package:base_flutter/data/page_data/select_showtime_page_data.dart';
 import 'package:base_flutter/data/repositories/cinema_repository.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
+import 'package:base_flutter/presentation/widgets/app_dialog/show_login_warning_dialog.dart';
 import 'package:get/get.dart';
 
 class SelectCinemaController extends BaseController {
@@ -46,5 +49,19 @@ class SelectCinemaController extends BaseController {
     );
 
     loading.value = false;
+  }
+
+  onSelectCinema(CinemaEntity cinema) async {
+    if (appProvider.isAuth == false) {
+      final isLoginOk = await showShouldLoginDialog();
+      if (isLoginOk == false) {
+        return;
+      }
+    }
+
+    Get.toNamed(
+      RouteName.selectShowtime,
+      arguments: SelectShowtimePageData(cinema: cinema),
+    );
   }
 }

@@ -88,6 +88,14 @@ class SelectSeatsController extends BaseController with GetTickerProviderStateMi
     super.dispose();
   }
 
+  onRefresh() {
+    if (selectedSeats.isEmpty && isShowPrice) {
+      isShowPrice = false;
+      animationShowPriceController.reverse();
+    }
+    _callApiGetDetail();
+  }
+
   onSelect(SeatEntity seat) {
     if (selectedSeats.contains(seat)) {
       selectedSeats.value = selectedSeats.where((element) => element != seat).toList();
