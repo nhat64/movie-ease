@@ -56,6 +56,9 @@ class SvgPaths {
   static const String icPopcornSelected = '$_basePath/ic_popcorn_selected.svg';
 
   static const String icChange = '$_basePath/ic_change.svg';
+
+  static const String icPlus = '$_basePath/ic_plus.svg';
+  static const String icDecrease = '$_basePath/ic_decrease.svg';
 }
 
 class ImagePaths {

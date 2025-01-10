@@ -32,18 +32,19 @@ class HomePage extends BaseScreen<HomeController> {
             child: _buildImageBackground(context),
           ),
           Positioned(
-              top: 0,
-              width: constraints.maxWidth,
-              height: constraints.maxHeight,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black],
-                  ),
+            top: 0,
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black],
                 ),
-              )),
+              ),
+            ),
+          ),
           SizedBox(
             width: constraints.maxWidth,
             height: constraints.maxHeight,
@@ -157,12 +158,17 @@ class HomePage extends BaseScreen<HomeController> {
   _buildImageBackground(BuildContext context) {
     return Obx(
       () {
+        if ((controller.appProvider.showingMovies.isEmpty && controller.isShowShowing.value == true) || (controller.appProvider.comingMovies.isEmpty && controller.isShowShowing.value == false)) {
+          return const SizedBox();
+        }
+
         final isShowShowing = controller.isShowShowing.value;
         final currentIndex = isShowShowing ? controller.currentShowingIndex.value : controller.currentComingIndex.value;
+
         return Opacity(
           opacity: 0.5,
           child: Image.network(
-            isShowShowing ? controller.appProvider.showingMovies[currentIndex].poster : controller.appProvider.comingMovies[currentIndex].poster,
+            isShowShowing ? controller.appProvider.showingMovies[currentIndex].avatar : controller.appProvider.comingMovies[currentIndex].avatar,
             errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
             fit: BoxFit.cover,
           ),

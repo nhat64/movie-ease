@@ -1,7 +1,12 @@
 import 'package:base_flutter/app/base/helper/log.dart';
 import 'package:base_flutter/app/base/mvvm/model/source/local/local_storage.dart';
+import 'package:base_flutter/app/base/mvvm/model/source/network/api_result.dart';
+import 'package:base_flutter/app/base/widget_common/custom_snack_bar.dart';
 import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/data/entity/profile_entity.dart';
+import 'package:base_flutter/data/repositories/movie_repository.dart';
+import 'package:base_flutter/data/repositories/profile_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -72,5 +77,55 @@ class AppProvider {
     Log.console('tmpPosition: ${tmpPosition.latitude} - ${tmpPosition.longitude}');
 
     position.value = tmpPosition;
+  }
+
+  callApiGetListMovie({int? videoStatus}) async {
+    final movieRepository = MovieRepository();
+    final rs = await movieRepository.getMovies(statusShow: videoStatus);
+
+    List<MovieEntity> tmpMovies = [];
+
+    await rs.when(
+      apiSuccess: (res) async {
+        tmpMovies = (res.data as List).map((e) => MovieEntity.fromJson(e)).toList();
+      },
+      apiFailure: (error) async {
+        Log.console('error: $error');
+      },
+    );
+
+    return tmpMovies;
+  }
+
+  getApiProfile() async {
+    String? token = LocalStorage.getString(LocalStorageKeys.accessToken);
+
+    if (token == null) return;
+
+    final profileRepos = ProfileRepository();
+
+    final ApiResult rs = await profileRepos.getProfile();
+
+    bool isSuccess = await rs.when(
+      apiSuccess: (res) async {
+        if (res.status == 200) {
+          final profile = ProfileEntity.fromJson(res.data);
+          updateUserData(profile);
+          return true;
+        } else {
+          return false;
+        }
+      },
+      apiFailure: (error) async {
+        if (error is DioException) {
+          if (error.response?.statusCode == 401) {
+            showCustomSnackBar(title: 'Thông báo', message: 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại');
+          }
+        }
+        return false;
+      },
+    );
+
+    return isSuccess;
   }
 }

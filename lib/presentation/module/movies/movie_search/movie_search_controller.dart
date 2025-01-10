@@ -37,7 +37,7 @@ class MovieSearchController extends BaseController {
   }
 
   onFilter() {
-    listIdGenreSelected.value = listGenreSelectedTmp.map((e) => e!.id).toList();
+    listIdGenreSelected.value = listGenreSelectedTmp.map((e) => e.id).toList();
     Get.back();
   }
 

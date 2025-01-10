@@ -71,7 +71,7 @@ class ChangePassController extends BaseController {
         if (res.status == 200) {
           Get.back();
 
-          showSnackBar(
+          showCustomSnackBar(
             title: 'Đăng ký',
             message: 'Đổi mật khẩu thành công!',
           );

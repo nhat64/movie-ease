@@ -82,7 +82,12 @@ class LoginController extends BaseController {
           LocalStorage.setString(LocalStorageKeys.accessToken, loginRes.token);
           return true;
         } else {
-          errorText.value = res.message ?? 'Có lỗi xảy ra';
+          if (res.message is String) {
+            errorText.value = res.message!;
+          } else {
+            errorText.value = ((res.message as Map<String, dynamic>)['password'] as List<dynamic>)[0];
+          }
+
           return false;
         }
       },

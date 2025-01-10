@@ -1,5 +1,6 @@
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
+import 'package:base_flutter/app/utils/day_time.dart';
 import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/data/page_data/select_cinema_page_data.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
@@ -66,7 +67,7 @@ class MovieSlideItemWidget extends StatelessWidget {
                       ),
                       clipBehavior: Clip.antiAlias,
                       child: Image.network(
-                        movieItem.poster,
+                        movieItem.avatar,
                         errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                         fit: BoxFit.cover,
                       ),
@@ -129,13 +130,15 @@ class MovieSlideItemWidget extends StatelessWidget {
   }
 
   Widget _buildStub() {
+    bool isShowing = checkShowingDate(movieItem.date);
+
     return Align(
       alignment: Alignment.center,
       child: LayoutBuilder(
         builder: (context, constraint) {
           return ScaleButton(
             onTap: () {
-              if (offsetIndex.abs() == 0) {
+              if (offsetIndex.abs() == 0 && isShowing) {
                 Get.toNamed(RouteName.selectCinema, arguments: SelectCinemaPageData(movie: movieItem));
               }
             },
@@ -144,12 +147,12 @@ class MovieSlideItemWidget extends StatelessWidget {
               height: 46,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: Colors.white.withOpacity(0.6),
+                color: isShowing ? Colors.white.withOpacity(0.6) : Colors.transparent,
               ),
               alignment: Alignment.center,
-              child: const Text(
-                'Mua vé',
-                style: TextStyle(
+              child: Text(
+                isShowing ? 'Mua vé' : 'Sắp chiếu',
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,

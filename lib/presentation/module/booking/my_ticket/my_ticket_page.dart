@@ -36,12 +36,19 @@ class MyTicketPage extends BaseScreen<MyTicketController> {
 
   @override
   Widget buildScreen(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          MyTicketTabBar(controller: controller),
-        ],
-      ),
+    return Column(
+      children: [
+        MyTicketTabBar(controller: controller),
+        Expanded(
+          child: SizedBox(
+            width: double.infinity,
+            child: TabBarView(
+              controller: controller.tabController,
+              children: controller.tabViews,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

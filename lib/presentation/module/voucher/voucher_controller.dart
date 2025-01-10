@@ -7,20 +7,20 @@ import 'package:get/get.dart';
 class VoucherController extends BaseController {
   VoucherController();
 
-  final _promotionRepos = Get.find<PromotionRepository>();
-
   RxList<PromotionEntity> listPromotion = <PromotionEntity>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    _fetchPromotions();
+    fetchPromotions();
   }
 
-  _fetchPromotions() async {
+  fetchPromotions() async {
+    final promotionRepos = PromotionRepository();
+
     loading.value = true;
 
-    final rs = await _promotionRepos.getPromotions();
+    final rs = await promotionRepos.getPromotions();
 
     rs.when(
       apiSuccess: (res) {

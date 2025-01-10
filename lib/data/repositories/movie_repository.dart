@@ -6,6 +6,10 @@ import 'package:base_flutter/app/constans/app_strings.dart';
 
 abstract class MoviePath {
   static const String getMovies = '/api/app/movies/get-list';
+  static String getMovieDetail(int id) => '/api/app/movies/show/$id';
+  static String postComment = '/api/app/comment/create';
+  static String getListComment(int id) => '/api/app/comment/get/$id';
+  static String deleteComent(int id) => '/api/app/comment/delete/$id';
 }
 
 class MovieRepository extends BaseRepository {
@@ -24,6 +28,49 @@ class MovieRepository extends BaseRepository {
           if (statusShow != null) 'statusShow': statusShow,
         },
       );
+      return ApiResult.apiSuccess(BaseResponse.fromJson(resData));
+    } on Exception catch (e) {
+      return ApiResult.apiFailure(e);
+    }
+  }
+
+  Future<ApiResult> getMovieDetail(int id) async {
+    try {
+      final resData = await dioClient.get(MoviePath.getMovieDetail(id));
+      return ApiResult.apiSuccess(BaseResponse.fromJson(resData));
+    } on Exception catch (e) {
+      return ApiResult.apiFailure(e);
+    }
+  }
+
+  Future<ApiResult> postComment({required int movieId, required String content, required int rating}) async {
+    try {
+      final resData = await dioClient.post(
+        MoviePath.postComment,
+        data: {
+          'movie_id': movieId,
+          'comment': content,
+          'vote_star': rating,
+        },
+      );
+      return ApiResult.apiSuccess(BaseResponse.fromJson(resData));
+    } on Exception catch (e) {
+      return ApiResult.apiFailure(e);
+    }
+  }
+
+  Future<ApiResult> getListComment(int id) async {
+    try {
+      final resData = await dioClient.get(MoviePath.getListComment(id));
+      return ApiResult.apiSuccess(BaseResponse.fromJson(resData));
+    } on Exception catch (e) {
+      return ApiResult.apiFailure(e);
+    }
+  }
+
+  Future<ApiResult> deleteComment(int id) async {
+    try {
+      final resData = await dioClient.delete(MoviePath.deleteComent(id));
       return ApiResult.apiSuccess(BaseResponse.fromJson(resData));
     } on Exception catch (e) {
       return ApiResult.apiFailure(e);
@@ -49,8 +96,7 @@ extension FakeDataMovie on MovieRepository {
 List<dynamic> listMovie = [
   {
     "id": 1,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-linhmieu.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-linhmieu.jpg",
     "name": "LINH MIÊU",
     "date": "22-11-2024",
     "duration": 7200,
@@ -64,8 +110,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 2,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/a/m/amazon-main-poster-printing.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/a/m/amazon-main-poster-printing.jpg",
     "name": "CƯỜI XUYÊN BIÊN GIỚI",
     "date": "15-11-2024",
     "duration": 7200,
@@ -79,8 +124,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 3,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/7/0/700x1000-gladiator.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/7/0/700x1000-gladiator.jpg",
     "name": "VÕ SĨ GIÁC ĐẤU II",
     "date": "15-11-2024",
     "duration": 7200,
@@ -94,8 +138,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 4,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-red-one_1.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-red-one_1.jpg",
     "name": "MẬT MÃ ĐỎ",
     "date": "8-11-2024",
     "duration": 7200,
@@ -109,8 +152,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 5,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/l/i/litbc-main-poster-printing.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/l/i/litbc-main-poster-printing.jpg",
     "name": "ĐÔI BẠN HỌC YÊU",
     "date": "8-11-2024",
     "duration": 7200,
@@ -124,8 +166,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 6,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/_/s/_size_chu_n_nxcmct_main-poster_dctr_1_.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/_/s/_size_chu_n_nxcmct_main-poster_dctr_1_.jpg",
     "name": "NGÀY XƯA CÓ MỘT CHUYỆN TÌNH",
     "date": "28-10-2024",
     "duration": 7200,
@@ -139,19 +180,13 @@ List<dynamic> listMovie = [
   },
   {
     "id": 7,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/r/s/rsz_vnm3_intl_online_1080x1350_tsr_01.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/r/s/rsz_vnm3_intl_online_1080x1350_tsr_01.jpg",
     "name": "VENOM: KÈO CUỐI KÈO CUỐI KÈO CUỐI ",
     "date": "25-10-2024",
     "duration": 7200,
     "trailerUrl": "https://youtu.be/id1rfr_KZWg",
     "director": "Kelly Marcel",
-    "movieGenre": [
-      "Hành động",
-      "Khoa học viễn tưởng",
-      "Phiêu lưu",
-      "Thần thoại"
-    ],
+    "movieGenre": ["Hành động", "Khoa học viễn tưởng", "Phiêu lưu", "Thần thoại"],
     "rated": "18+",
     "country": "Mỹ",
     "description":
@@ -159,8 +194,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 8,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/o/f/official_poster_the_substance.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/o/f/official_poster_the_substance.jpg",
     "name": "THẦN DƯỢC",
     "date": "01-11-2024",
     "duration": 7200,
@@ -174,8 +208,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 9,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_ngay_ta_da_yeu_6.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_ngay_ta_da_yeu_6.jpg",
     "name": "NGÀY TA ĐÃ YÊU",
     "date": "15-11-2024",
     "duration": 7200,
@@ -189,8 +222,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 10,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/o/z/ozi_poster_single_470x700.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/o/z/ozi_poster_single_470x700.jpg",
     "name": "OZI: PHI VỤ RỪNG XANH",
     "date": "15-11-2024",
     "duration": 7200,
@@ -204,8 +236,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 11,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/c/l/clnc-digitalposter-vnmarket-2048_1_.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/c/l/clnc-digitalposter-vnmarket-2048_1_.jpg",
     "name": "CU LI KHÔNG BAO GIỜ KHÓC",
     "date": "15-11-2024",
     "duration": 7200,
@@ -219,8 +250,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 12,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/h/o/hon_ma_theo_duoi_-_payoff_poster_-_kc_15.11.2024.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/h/o/hon_ma_theo_duoi_-_payoff_poster_-_kc_15.11.2024.jpg",
     "name": "HỒN MA THEO ĐUỔI",
     "date": "15-11-2024",
     "duration": 7200,
@@ -234,8 +264,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 13,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/k/e/kedongthe_payoff_poster_kc15.11.2024.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/k/e/kedongthe_payoff_poster_kc15.11.2024.jpg",
     "name": "KẺ ĐÓNG THẾ",
     "date": "15-11-2024",
     "duration": 7200,
@@ -249,8 +278,7 @@ List<dynamic> listMovie = [
   },
   {
     "id": 14,
-    "poster":
-        "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-never-let-go.jpg",
+    "poster": "https://iguov8nhvyobj.vcdn.cloud/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/3/5/350x495-never-let-go.jpg",
     "name": "ĐỪNG BUÔNG TAY",
     "date": "08-11-2024",
     "duration": 7200,

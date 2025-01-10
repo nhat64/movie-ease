@@ -38,6 +38,7 @@ class OutlineTextFieldCustom extends StatefulWidget {
   final InputBorder? errorBorder;
   final InputBorder? focusedErrorBorder;
   final InputBorder? submitBorder;
+  final InputBorder? disabledBorder;
 
   final Widget? errorWidget;
   final VoidCallback? onTextFieldTap;
@@ -77,6 +78,7 @@ class OutlineTextFieldCustom extends StatefulWidget {
     this.border,
     this.focusedBorder,
     this.errorBorder,
+    this.disabledBorder,
     this.focusedErrorBorder,
     this.submitBorder,
     this.errorWidget,
@@ -135,8 +137,7 @@ class _OutlineTextFieldCustomState extends State<OutlineTextFieldCustom> {
 
   @override
   Widget build(BuildContext context) {
-    final Color errorColor =
-        widget.errorStyle?.color ?? const Color(0xFFFF3B30);
+    final Color errorColor = widget.errorStyle?.color ?? const Color(0xFFFF3B30);
     TextStyle? styleOfContent = widget.contentStyle;
     TextStyle? styleOfLabel = widget.labelStyle;
     TextStyle? styleOfFloatingLabel = widget.floatingLabelStyle;
@@ -146,8 +147,7 @@ class _OutlineTextFieldCustomState extends State<OutlineTextFieldCustom> {
     if (isError) {
       styleOfContent = widget.contentStyle?.copyWith(color: errorColor);
       styleOfLabel = widget.labelStyle?.copyWith(color: errorColor);
-      styleOfFloatingLabel =
-          widget.floatingLabelStyle?.copyWith(color: errorColor);
+      styleOfFloatingLabel = widget.floatingLabelStyle?.copyWith(color: errorColor);
     }
 
     return Column(
@@ -171,44 +171,33 @@ class _OutlineTextFieldCustomState extends State<OutlineTextFieldCustom> {
             scrollPadding: const EdgeInsets.only(bottom: 18),
             readOnly: widget.isDisable,
             maxLength: widget.maxLength,
-            buildCounter: (context,
-                    {required currentLength,
-                    required isFocused,
-                    required maxLength}) =>
-                null,
+            buildCounter: (context, {required currentLength, required isFocused, required maxLength}) => null,
             inputFormatters: widget.inputFormatters,
             autofocus: false,
             decoration: InputDecoration(
               filled: widget.filled,
               fillColor: widget.fillColor,
               contentPadding: widget.contentPadding,
-              isDense: true,
               labelText: widget.labelText,
               labelStyle: styleOfLabel,
               floatingLabelBehavior: widget.floatingLabelBehavior,
               floatingLabelStyle: styleOfFloatingLabel,
               hintText: widget.hintText,
               hintStyle: widget.hintStyle,
-              border:
-                  (widget.submitBorder != null && _controller.text.isNotEmpty)
-                      ? widget.submitBorder
-                      : widget.border,
+              border: (widget.submitBorder != null && _controller.text.isNotEmpty) ? widget.submitBorder : widget.border,
               focusedBorder: widget.focusedBorder,
               errorBorder: widget.errorBorder,
               focusedErrorBorder: widget.focusedErrorBorder,
-              enabledBorder:
-                  (widget.submitBorder != null && _controller.text.isNotEmpty)
-                      ? widget.submitBorder
-                      : widget.border,
+              enabledBorder: (widget.submitBorder != null && _controller.text.isNotEmpty) ? widget.submitBorder : widget.border,
+              disabledBorder: widget.disabledBorder,
               error: isError ? const SizedBox.shrink() : null,
-              prefixIconConstraints:
-                  const BoxConstraints(minHeight: 0, minWidth: 0),
+              isDense: true,
+              prefixIconConstraints: const BoxConstraints(minHeight: 0, minWidth: 0),
               prefixIcon: !isError
                   ? widget.prefixIcon
                   : widget.prefixIcon != null
                       ? ColorFiltered(
-                          colorFilter:
-                              ColorFilter.mode(errorColor, BlendMode.srcIn),
+                          colorFilter: ColorFilter.mode(errorColor, BlendMode.srcIn),
                           child: widget.prefixIcon,
                         )
                       : null,
@@ -221,9 +210,7 @@ class _OutlineTextFieldCustomState extends State<OutlineTextFieldCustom> {
                           BlendMode.srcIn,
                         ),
                         child: Icon(
-                          _obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          _obscureText ? Icons.visibility_off : Icons.visibility,
                           size: widget.suffixIconSize,
                         ),
                       ),

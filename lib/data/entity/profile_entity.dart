@@ -28,4 +28,24 @@ class ProfileEntity {
   factory ProfileEntity.fromJson(Map<String, dynamic> json) => _$ProfileEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProfileEntityToJson(this);
+
+  ProfileEntity copyWith({
+    int? id,
+    int? accountId,
+    String? name,
+    String? age,
+    String? phoneNumber,
+    String? avatar,
+    AccountEntity? account,
+  }) {
+    return ProfileEntity(
+      id: id ?? this.id,
+      accountId: accountId ?? this.accountId,
+      name: name ?? this.name,
+      age: age ?? this.age,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      avatar: avatar ?? this.avatar,
+      account: account ?? this.account,
+    );
+  }
 }

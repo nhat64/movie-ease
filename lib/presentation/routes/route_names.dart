@@ -16,4 +16,8 @@ class RouteName {
   static const forgot = '/forgot';
   static const voucherDetail = '/voucherDetail';
   static const cinemaDetail = '/cinemaDetail';
+  static const billDetail = '/billDetail';
+  static const allComment = '/allComment';
+  static const createComment = '/createComment';
+  static const editProfile = '/editProfile';
 }

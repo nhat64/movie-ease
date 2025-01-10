@@ -24,8 +24,8 @@ class ShowtimeRepository extends BaseRepository {
     try {
       final rs = await dioClient.get(ShowtimePath.getShowtimes, queryParameters: {
         'movie_id': movieId,
-        'cinema_id': 1,
-        'date': '2024-11-28',
+        'cinema_id': cinemaId,
+        'date': date,
       });
 
       return ApiResult.apiSuccess(BaseResponse.fromJson(rs));

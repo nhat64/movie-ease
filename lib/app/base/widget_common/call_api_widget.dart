@@ -20,6 +20,14 @@ class CallApiWidget {
     return result;
   }
 
+  static showLoading({required BuildContext context, Widget? child}) {
+    createHighlightOverlay(context: Get.context!, child: child);
+  }
+
+  static hideLoading() {
+    removeHighlightOverlay();
+  }
+
   static removeHighlightOverlay() {
     _overlayEntry?.remove();
     _overlayEntry?.dispose();
@@ -32,7 +40,12 @@ class CallApiWidget {
   }) {
     removeHighlightOverlay();
     OverlayState overlayState = Overlay.of(context);
+
     assert(_overlayEntry == null);
+
+    if (_overlayEntry != null) {
+      return;
+    }
 
     _overlayEntry = OverlayEntry(
       builder: (BuildContext context) {

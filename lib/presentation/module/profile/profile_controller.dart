@@ -7,6 +7,6 @@ class ProfileController extends BaseController {
   logout() {
     appProvider.removeUserData();
     Get.find<RootController>().onIndexNavChanged(0);
-    showSnackBar(title: 'Đăng xuất', message: 'Đăng xuất thành công');
+    showCustomSnackBar(title: 'Đăng xuất', message: 'Đăng xuất thành công');
   }
 }

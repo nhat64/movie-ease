@@ -33,12 +33,16 @@ dependencies:
   # base dependencies
   cupertino_icons: ^1.0.8
   easy_localization: ^3.0.7
-  google_fonts: ^6.2.1
   dio: ^5.6.0
   provider: ^6.1.2
   shared_preferences: ^2.2.3
   flutter_svg: ^2.0.10+1
   intl: ^0.19.0
+  flutter_image_compress: ^2.3.0
+  flutter_cache_manager: ^3.4.1
+  image_picker: ^1.1.2
+  # mime: ^2.0.0
+  path: ^1.9.0
   youtube_player_flutter: ^9.1.1
   get: ^4.6.6
   flutter_easyloading: ^3.0.5
@@ -52,7 +56,11 @@ dependencies:
   url_launcher: ^6.3.1
   geolocator: ^13.0.2
   app_links: ^6.3.3
+
   # only this app
+  flutter_initicon: ^3.0.1
+  qr_flutter: ^4.1.0
+  flutter_slidable: ^3.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,11 +1,16 @@
 import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
 import 'package:base_flutter/app/base/widget_common/call_api_widget.dart';
+import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
+import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/app/utils/caculator_book.dart';
+import 'package:base_flutter/data/page_data/payment_page_data.dart';
 import 'package:base_flutter/presentation/module/booking/select_popcorn/popcorn_controller.dart';
+import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:base_flutter/presentation/widgets/money_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class PopcornPage extends BaseScreen<PopcornController> {
@@ -32,7 +37,15 @@ class PopcornPage extends BaseScreen<PopcornController> {
           padding: const EdgeInsets.only(right: 12.0),
           child: InkWell(
             onTap: () {
-              controller.reservation();
+              Get.toNamed(
+                RouteName.payment,
+                arguments: PaymentPageData(
+                  selectedSeats: controller.pageData.selectedSeats,
+                  movie: controller.pageData.movie,
+                  cinema: controller.pageData.cinema,
+                  showtime: controller.pageData.showtime,
+                ),
+              );
             },
             child: const Text(
               "Bỏ qua",
@@ -78,7 +91,8 @@ class PopcornPage extends BaseScreen<PopcornController> {
         }
 
         final listPopcorn = controller.listPopcorn;
-        final selectedPopcorn = controller.selectedPopcorn.value;
+        // ignore: invalid_use_of_protected_member
+        final listFoodOrder = controller.listFoodOrder.value;
 
         return Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
@@ -149,25 +163,83 @@ class PopcornPage extends BaseScreen<PopcornController> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    ScaleButton(
-                      onTap: () {
-                        controller.onSelectPopcorn(popcorn);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: selectedPopcorn?.id == popcorn.id ? Colors.red : AppColors.yellowFCC434,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Text(
-                          selectedPopcorn?.id == popcorn.id ? "Bỏ chọn" : "Chọn",
-                          style: TextStyle(
-                            color: selectedPopcorn?.id == popcorn.id ? Colors.white : Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                    // ScaleButton(
+                    //   onTap: () {
+                    //     controller.onSelectPopcorn(popcorn);
+                    //   },
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       color: selectedPopcorn?.id == popcorn.id ? Colors.red : AppColors.yellowFCC434,
+                    //       borderRadius: BorderRadius.circular(8),
+                    //     ),
+                    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    //     child: Text(
+                    //       selectedPopcorn?.id == popcorn.id ? "Bỏ chọn" : "Chọn",
+                    //       style: TextStyle(
+                    //         color: selectedPopcorn?.id == popcorn.id ? Colors.white : Colors.black,
+                    //         fontSize: 14,
+                    //         fontWeight: FontWeight.w600,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            controller.onDecreaseFood(popcorn);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: controller.canRemoveFood(popcorn) ? AppColors.yellowFCC434 : Colors.white.withOpacity(0.5),
+                              ),
+                            ),
+                            height: 24,
+                            width: 24,
+                            child: ColoredIcon(
+                              color: controller.canRemoveFood(popcorn) ? AppColors.yellowFCC434 : Colors.white.withOpacity(0.5),
+                              child: SvgPicture.asset(SvgPaths.icDecrease),
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 10),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 24,
+                          width: 26,
+                          child: Text(
+                            listFoodOrder[popcorn]?.toString() ?? "0",
+                            style: TextStyle(
+                              color: listFoodOrder[popcorn] != null ? Colors.white : Colors.white.withOpacity(0.5),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            controller.onAddFood(popcorn);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: AppColors.yellowFCC434,
+                                )),
+                            height: 24,
+                            width: 24,
+                            child: ColoredIcon(
+                              color: AppColors.yellowFCC434,
+                              child: SvgPicture.asset(SvgPaths.icPlus),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(width: 16),
                   ],
@@ -244,7 +316,7 @@ class PopcornPage extends BaseScreen<PopcornController> {
                         children: [
                           Expanded(
                             child: Text(
-                              controller.selectedPopcorn.value?.name ?? "",
+                              'Bắp nước x ${controller.listFoodOrder.isNotEmpty ? controller.listFoodOrder.values.reduce((value, element) => value + element) : 0}',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -273,7 +345,7 @@ class PopcornPage extends BaseScreen<PopcornController> {
                           ),
                           const SizedBox(width: 5),
                           MoneyTextWidget(
-                            money: caculatePrice(listSelected: controller.pageData.selectedSeats, popcorns: controller.selectedPopcorn.value),
+                            money: caculatePrice(listSelected: controller.pageData.selectedSeats, foodOrdered: controller.listFoodOrder),
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -296,8 +368,15 @@ class PopcornPage extends BaseScreen<PopcornController> {
             const SizedBox(width: 20),
             ScaleButton(
               onTap: () {
-                controller.reservation(
-                  popcorn: controller.selectedPopcorn.value,
+                Get.toNamed(
+                  RouteName.payment,
+                  arguments: PaymentPageData(
+                    selectedSeats: controller.pageData.selectedSeats,
+                    movie: controller.pageData.movie,
+                    cinema: controller.pageData.cinema,
+                    showtime: controller.pageData.showtime,
+                    foodOrdered: controller.listFoodOrder,
+                  ),
                 );
               },
               child: Container(

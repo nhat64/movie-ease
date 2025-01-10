@@ -5,6 +5,7 @@ import 'package:base_flutter/data/entity/seat_entity.dart';
 import 'package:base_flutter/data/page_data/select_seats_page_data.dart';
 import 'package:base_flutter/data/repositories/showtime_repository.dart';
 import 'package:base_flutter/data/response/showtime_detail_response.dart';
+import 'package:base_flutter/presentation/widgets/app_dialog/show_aler_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -104,12 +105,24 @@ class SelectSeatsController extends BaseController with GetTickerProviderStateMi
         animationShowPriceController.reverse();
       }
     } else {
+      if (_checkSeatMoreThan8()) {
+        return;
+      }
+
       selectedSeats.value = [...selectedSeats, seat];
       if (!isShowPrice && selectedSeats.isNotEmpty) {
         isShowPrice = true;
         animationShowPriceController.forward();
       }
     }
+  }
+
+  _checkSeatMoreThan8() {
+    if (selectedSeats.length >= 8) {
+      showAlerDialog(content: 'Bạn chỉ được chọn tối đa 8 ghế');
+      return true;
+    }
+    return false;
   }
 
   _callApiGetDetail() async {

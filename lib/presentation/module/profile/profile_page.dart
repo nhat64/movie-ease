@@ -1,8 +1,10 @@
 import 'package:base_flutter/app/base/mvvm/view/base_screen.dart';
 import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
+import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
 import 'package:base_flutter/presentation/module/profile/profile_controller.dart';
+import 'package:base_flutter/presentation/module/profile/widget/app_avatar.dart';
 import 'package:base_flutter/presentation/module/profile/widget/confirm_logout_bottomsheet.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
@@ -61,73 +63,82 @@ class ProfilePage extends BaseScreen<ProfileController> {
   }
 
   Widget _buildUserCard() {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        border: Border.all(
-          color: AppColors.black262626,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 65,
-            height: 65,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.black262626,
-                width: 2,
+    return Obx(
+      () {
+        final avatarPath = controller.appProvider.userData.value?.avatar;
+        final name = controller.appProvider.userData.value?.name;
+        final phone = controller.appProvider.userData.value?.phoneNumber;
+        return Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(
+              color: AppColors.black262626,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 65,
+                height: 65,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.black262626,
+                    width: 2,
+                  ),
+                ),
+                child: AppAvatar(
+                  name: name ?? 'name',
+                  avatarPath: avatarPath,
+                  size: 65,
+                ),
               ),
-            ),
-            child: Image.asset(
-              ImagePaths.avatarDefault,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 13),
-          Expanded(
-            child: Obx(() {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    controller.appProvider.userData.value == null ? 'name' : controller.appProvider.userData.value!.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
+              const SizedBox(width: 13),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name ?? 'name',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    controller.appProvider.userData.value == null ? 'email' : controller.appProvider.userData.value!.phoneNumber,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
+                    const SizedBox(height: 4),
+                    Text(
+                      phone ?? 'phone',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 13),
+              ScaleButton(
+                onTap: () => Get.toNamed(RouteName.editProfile),
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: SvgPicture.asset(
+                    SvgPaths.icEditPen,
                   ),
-                ],
-              );
-            }),
+                ),
+              )
+            ],
           ),
-          const SizedBox(width: 13),
-          SizedBox(
-            width: 24,
-            height: 24,
-            child: SvgPicture.asset(
-              SvgPaths.icEditPen,
-            ),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 

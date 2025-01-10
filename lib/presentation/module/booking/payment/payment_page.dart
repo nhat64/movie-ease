@@ -37,7 +37,18 @@ class PaymentPage extends BaseScreen<PaymentController> {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
         onPressed: () {
-          Navigator.of(context).pop();
+          if (controller.isWaitingPayment.value) {
+            showAlerDialog(
+              content: 'Đang chờ thanh toán, có chắc muốn thoát ?',
+              onOk: () {
+                Get.close(3);
+                Get.find<SelectSeatsController>().selectedSeats.value = [];
+                Get.find<SelectSeatsController>().onRefresh();
+              },
+            );
+          } else {
+            Get.back();
+          }
         },
       ),
     );
@@ -122,7 +133,7 @@ class PaymentPage extends BaseScreen<PaymentController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(
-            controller.pageData.movie.poster,
+            controller.pageData.movie.avatar,
             fit: BoxFit.fitHeight,
           ),
           Expanded(
@@ -171,51 +182,54 @@ class PaymentPage extends BaseScreen<PaymentController> {
       required String title,
       required int contentMoney,
     }) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Row(
-            children: [
-              if (contentMoney < 0)
-                const Text(
-                  '-',
-                  style: TextStyle(
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-              MoneyTextWidget(
-                money: contentMoney.abs(),
-                unitRight: true,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-                unitStyle: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
               ),
-            ],
-          )
-        ],
+            ),
+            const SizedBox(width: 8),
+            Row(
+              children: [
+                if (contentMoney < 0)
+                  const Text(
+                    '-',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                MoneyTextWidget(
+                  money: contentMoney.abs(),
+                  unitRight: true,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  unitStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       );
     }
 
@@ -225,13 +239,13 @@ class PaymentPage extends BaseScreen<PaymentController> {
           title: controller.pageData.selectedSeats.map((e) => e.code).join(', '),
           contentMoney: caculatePrice(listSelected: controller.pageData.selectedSeats),
         ),
-        const SizedBox(height: 16),
-        if (controller.pageData.popcorns != null)
-          buildInfoPayment(
-            title: controller.pageData.popcorns!.name,
-            contentMoney: controller.pageData.popcorns!.price,
+        if (controller.pageData.foodOrdered != null)
+          ...controller.pageData.foodOrdered!.entries.map(
+            (e) => buildInfoPayment(
+              title: '${e.key.name} x ${e.value}',
+              contentMoney: e.key.price * e.value,
+            ),
           ),
-        const SizedBox(height: 16),
         Obx(
           () => controller.promotionSelected.value != null
               ? buildInfoPayment(
@@ -478,22 +492,8 @@ class PaymentPage extends BaseScreen<PaymentController> {
               ValueListenableBuilder(
                 valueListenable: controller.timerCountdownService.currentSeconds,
                 builder: (_, value, __) {
-                  if (value == 0) {
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (timeStamp) {
-                        showAlerDialog(
-                          content: 'Hết thời gian thanh toán',
-                          onOk: () {
-                            Get.close(2);
-                            Get.find<SelectSeatsController>().selectedSeats.value = [];
-                            Get.find<SelectSeatsController>().onRefresh();
-                          },
-                        );
-                      },
-                    );
-                  }
                   return Text(
-                    convertSecondsToMS(value),
+                    value == -1 ? '10:00' : convertSecondsToMS(value),
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 14,
@@ -524,7 +524,7 @@ class PaymentPage extends BaseScreen<PaymentController> {
                     () => MoneyTextWidget(
                       money: caculatePrice(
                         listSelected: controller.pageData.selectedSeats,
-                        popcorns: controller.pageData.popcorns,
+                        foodOrdered: controller.pageData.foodOrdered,
                         promotion: controller.promotionSelected.value,
                       ),
                       unitRight: true,

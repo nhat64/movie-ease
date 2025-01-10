@@ -1,14 +1,8 @@
 import 'package:base_flutter/app/base/helper/log.dart';
-import 'package:base_flutter/app/base/mvvm/model/source/network/api_result.dart';
 import 'package:base_flutter/app/base/mvvm/view_model/base_controller.dart';
-import 'package:base_flutter/app/base/widget_common/call_api_widget.dart';
-import 'package:base_flutter/app/base/widget_common/custom_snack_bar.dart';
 import 'package:base_flutter/data/entity/popcorn_entity.dart';
-import 'package:base_flutter/data/page_data/payment_page_data.dart';
 import 'package:base_flutter/data/page_data/select_popcorn_data.dart';
-import 'package:base_flutter/data/repositories/book_repository.dart';
 import 'package:base_flutter/data/repositories/popcorn_repository.dart';
-import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,11 +12,10 @@ class PopcornController extends BaseController with GetTickerProviderStateMixin 
   PopcornController(this.pageData);
 
   final _popcornRepos = Get.find<PopcornRepository>();
-  final _bookRepository = BookRepository();
 
   RxList<PopcornEntity> listPopcorn = <PopcornEntity>[].obs;
 
-  Rx<PopcornEntity?> selectedPopcorn = Rx<PopcornEntity?>(null);
+  RxMap<PopcornEntity, int> listFoodOrder = <PopcornEntity, int>{}.obs;
 
   late AnimationController animationShowPriceController;
   late Animation<double> animationShowPrice;
@@ -38,51 +31,52 @@ class PopcornController extends BaseController with GetTickerProviderStateMixin 
     _fetchPopcorns();
   }
 
-  onSelectPopcorn(PopcornEntity popcorn) {
-    if (selectedPopcorn.value?.id == popcorn.id) {
-      selectedPopcorn.value = null;
-      isShowPrice = false;
-      animationShowPriceController.reverse();
-    } else {
-      selectedPopcorn.value = popcorn;
-      if (!isShowPrice) {
-        isShowPrice = true;
-        animationShowPriceController.forward();
+  onAddFood(PopcornEntity food) {
+    Map<PopcornEntity, int> tmpMap = Map.from(listFoodOrder);
+
+    if (tmpMap.containsKey(food)) {
+      if (tmpMap[food]! >= 99) {
+        return;
       }
+      tmpMap[food] = tmpMap[food]! + 1;
+    } else {
+      tmpMap[food] = 1;
     }
+
+    listFoodOrder.value = tmpMap;
+
+    checkNeedShowBottomSheet();
   }
 
-  reservation({PopcornEntity? popcorn}) async {
-    final ApiResult rs = await CallApiWidget.checkTimeCallApi(
-      api: _bookRepository.reservation(
-        cinemaId: pageData.cinema.id,
-        showTimeId: pageData.showtime.id,
-        seatIds: pageData.selectedSeats.map((e) => e.id!).toList(),
-      ),
-      context: Get.context!,
-    );
+  onDecreaseFood(PopcornEntity food) {
+    Map<PopcornEntity, int> tmpMap = Map.from(listFoodOrder);
 
-    rs.when(
-      apiSuccess: (res) {
-        if (res.status == 200) {
-          Get.toNamed(
-            RouteName.payment,
-            arguments: PaymentPageData(
-              selectedSeats: pageData.selectedSeats,
-              movie: pageData.movie,
-              cinema: pageData.cinema,
-              showtime: pageData.showtime,
-              popcorns: popcorn,
-            ),
-          );
-        } else {
-          showSnackBar(title: 'Thanh toán', message: res.message ?? '');
-        }
-      },
-      apiFailure: (error) {
-        Log.console('error: $error');
-      },
-    );
+    if (tmpMap.containsKey(food)) {
+      if (tmpMap[food]! > 1) {
+        tmpMap[food] = tmpMap[food]! - 1;
+      } else {
+        tmpMap.remove(food);
+      }
+    }
+
+    listFoodOrder.value = tmpMap;
+    checkNeedShowBottomSheet();
+  }
+
+  canRemoveFood(PopcornEntity food) {
+    return listFoodOrder.containsKey(food);
+  }
+
+  checkNeedShowBottomSheet() {
+    if (listFoodOrder.isNotEmpty && !isShowPrice) {
+      isShowPrice = true;
+      animationShowPriceController.forward();
+    }
+
+    if (listFoodOrder.isEmpty && isShowPrice) {
+      isShowPrice = false;
+      animationShowPriceController.reverse();
+    }
   }
 
   _fetchPopcorns() async {

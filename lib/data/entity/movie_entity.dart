@@ -7,7 +7,7 @@ part 'movie_entity.g.dart';
 @JsonSerializable()
 class MovieEntity {
   final int id;
-  final String poster;
+  final String avatar;
   final String name;
   @JsonKey(name: 'trailer_url')
   final String trailerUrl;
@@ -20,12 +20,22 @@ class MovieEntity {
   final String country;
   final String description;
 
+  @JsonKey(name: 'vote_total')
+  int voteTotal;
+  @JsonKey(name: 'voting')
+  String voting;
+  @JsonKey(name: 'isEva')
+  bool isEva;
+  @JsonKey(name: 'seen_status')
+  int seenStatus;
+
+  // for select show time
   @JsonKey(name: 'show_time')
   List<ShowtimeEntity> showtime;
 
   MovieEntity({
     this.id = 0,
-    required this.poster,
+    required this.avatar,
     required this.name,
     required this.date,
     required this.durationMinute,
@@ -35,8 +45,11 @@ class MovieEntity {
     this.rated = '18+',
     this.country = 'Việt Nam',
     this.description = 'Một bộ phim hay về một chuyến phiêu lưu của những người hùng, những tên cướp, những kẻ thù...',
-
     this.showtime = const [],
+    this.voteTotal = 0,
+    this.voting = '0.0',
+    this.isEva = false,
+    this.seenStatus = 0,
   });
 
   factory MovieEntity.fromJson(Map<String, dynamic> json) => _$MovieEntityFromJson(json);

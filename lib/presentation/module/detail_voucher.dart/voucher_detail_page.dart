@@ -93,7 +93,7 @@ class VoucherDetailPage extends BaseScreen<VoucherDetailController> {
               ),
             ),
           ),
-          ScaleButton(
+          if(!controller.promotion.isUsed) ScaleButton(
             onTap: () {
               Get.offNamedUntil(RouteName.selectCinema, (route) => route.settings.name == RouteName.root);
             },

@@ -9,7 +9,7 @@ class PaymentPageData {
   final CinemaEntity cinema;
   final MovieEntity movie;
   final ShowtimeEntity showtime;
-  final PopcornEntity? popcorns;
+  final Map<PopcornEntity, int>? foodOrdered;
 
-  PaymentPageData({required this.movie, required this.selectedSeats, required this.cinema, required this.showtime, this.popcorns});
+  PaymentPageData({required this.movie, required this.selectedSeats, required this.cinema, required this.showtime, this.foodOrdered});
 }

@@ -41,7 +41,7 @@ class ForgotController extends BaseController {
       apiSuccess: (data) {
         if (data.status == 200) {
           Get.back();
-          showSnackBar(
+          showCustomSnackBar(
             title: 'Quên mật khẩu',
             message: 'Vui lòng kiểm tra email để lấy lại mật khẩu',
           );

@@ -94,12 +94,7 @@ class RegisterController extends BaseController {
     }
 
     final ApiResult rs = await CallApiWidget.checkTimeCallApi(
-        api: _authRepos.register(
-            name: nameController.text,
-            username: usernameController.text,
-            pass: passwordController.text,
-            email: emailController.text,
-            phone: phoneController.text),
+        api: _authRepos.register(name: nameController.text, username: usernameController.text, pass: passwordController.text, email: emailController.text, phone: phoneController.text),
         context: Get.context!);
 
     rs.when(
@@ -107,7 +102,7 @@ class RegisterController extends BaseController {
         if (res.status == 200) {
           Get.back();
 
-          showSnackBar(
+          showCustomSnackBar(
             title: 'Đăng ký',
             message: 'Đăng kí thành công!',
           );

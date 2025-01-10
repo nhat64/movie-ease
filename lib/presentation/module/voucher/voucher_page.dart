@@ -3,6 +3,7 @@ import 'package:base_flutter/app/base/widget_common/call_api_widget.dart';
 import 'package:base_flutter/app/base/widget_common/colored_icon.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
+import 'package:base_flutter/data/entity/promotion_entity.dart';
 import 'package:base_flutter/presentation/module/voucher/voucher_controller.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,8 @@ class VoucherPage extends BaseScreen<VoucherController> {
           );
         }
 
+        List<PromotionEntity> listPromotion = controller.listPromotion.value;
+
         return Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 8),
           child: SingleChildScrollView(
@@ -48,7 +51,7 @@ class VoucherPage extends BaseScreen<VoucherController> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...controller.listPromotion.map(
+                ...listPromotion.map(
                   (e) {
                     return GestureDetector(
                       onTap: () {

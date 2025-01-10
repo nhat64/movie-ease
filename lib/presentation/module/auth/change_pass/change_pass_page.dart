@@ -10,6 +10,11 @@ class ChangePassPage extends BaseScreen<ChangePassController> {
   const ChangePassPage({super.key});
 
   @override
+  Function() get onTapScreen => () {
+        FocusScope.of(Get.context!).requestFocus(FocusNode());
+      };
+
+  @override
   Color? get screenBackgroundColor => Colors.black;
 
   @override

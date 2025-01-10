@@ -6,8 +6,12 @@ import 'package:base_flutter/presentation/module/auth/login/login_binding.dart';
 import 'package:base_flutter/presentation/module/auth/login/login_page.dart';
 import 'package:base_flutter/presentation/module/auth/register/register_page.dart';
 import 'package:base_flutter/presentation/module/auth/register/registor_bindings.dart';
+import 'package:base_flutter/presentation/module/booking/my_ticket/detail_bill/bill_detail_binding.dart';
+import 'package:base_flutter/presentation/module/booking/my_ticket/detail_bill/bill_detail_page.dart';
 import 'package:base_flutter/presentation/module/booking/my_ticket/my_ticket_binding.dart';
 import 'package:base_flutter/presentation/module/booking/my_ticket/my_ticket_page.dart';
+import 'package:base_flutter/presentation/module/booking/payment/payment_binding.dart';
+import 'package:base_flutter/presentation/module/booking/payment/payment_page.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_binding.dart';
 import 'package:base_flutter/presentation/module/booking/select_cinema/select_cinema_page.dart';
 import 'package:base_flutter/presentation/module/booking/select_popcorn/popcorn_binding.dart';
@@ -18,20 +22,24 @@ import 'package:base_flutter/presentation/module/booking/select_showtime/select_
 import 'package:base_flutter/presentation/module/booking/select_showtime/select_showtime_page.dart';
 import 'package:base_flutter/presentation/module/detail_cinema/cinema_detail_binding.dart';
 import 'package:base_flutter/presentation/module/detail_cinema/cinema_detail_page.dart';
+import 'package:base_flutter/presentation/module/detail_voucher.dart/voucher_detail_binding.dart';
+import 'package:base_flutter/presentation/module/detail_voucher.dart/voucher_detail_page.dart';
+import 'package:base_flutter/presentation/module/initial/initial_binding.dart';
+import 'package:base_flutter/presentation/module/initial/initial_page.dart';
+import 'package:base_flutter/presentation/module/movies/all_comment/all_comment_binding.dart';
+import 'package:base_flutter/presentation/module/movies/all_comment/all_comment_page.dart';
+import 'package:base_flutter/presentation/module/movies/create_comment/create_comment_binding.dart';
+import 'package:base_flutter/presentation/module/movies/create_comment/create_comment_page.dart';
 import 'package:base_flutter/presentation/module/movies/movie_detail/movie_detail_binding.dart';
 import 'package:base_flutter/presentation/module/movies/movie_detail/movie_detail_page.dart';
 import 'package:base_flutter/presentation/module/movies/movie_search/movie_search_binding.dart';
 import 'package:base_flutter/presentation/module/movies/movie_search/movie_search_page.dart';
 import 'package:base_flutter/presentation/module/movies/play_trailer/play_trailer_binding.dart';
 import 'package:base_flutter/presentation/module/movies/play_trailer/play_trailer_page.dart';
-import 'package:base_flutter/presentation/module/booking/payment/payment_binding.dart';
-import 'package:base_flutter/presentation/module/booking/payment/payment_page.dart';
+import 'package:base_flutter/presentation/module/profile/edit_profile/edit_profile_binding.dart';
+import 'package:base_flutter/presentation/module/profile/edit_profile/edit_profile_page.dart';
 import 'package:base_flutter/presentation/module/root/root_binding.dart';
 import 'package:base_flutter/presentation/module/root/root_page.dart';
-import 'package:base_flutter/presentation/module/detail_voucher.dart/voucher_detail_binding.dart';
-import 'package:base_flutter/presentation/module/detail_voucher.dart/voucher_detail_page.dart';
-import 'package:base_flutter/presentation/module/welcome/welcome_binding.dart';
-import 'package:base_flutter/presentation/module/welcome/welcome_page.dart';
 import 'package:base_flutter/presentation/routes/route_names.dart';
 import 'package:get/route_manager.dart';
 
@@ -41,8 +49,8 @@ class AppPages {
   static final appRoutes = [
     GetPage(
       name: RouteName.welcome,
-      page: () => const WelcomePage(),
-      binding: WelcomeBinding(),
+      page: () => const InitialPage(),
+      binding: InitialBinding(),
     ),
     GetPage(
       name: RouteName.root,
@@ -127,12 +135,32 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 200),
     ),
-     GetPage(
+    GetPage(
       name: RouteName.cinemaDetail,
       page: () => const CinemaDetailPage(),
       binding: CinemaDetailBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: RouteName.billDetail,
+      page: () => const BillDetailPage(),
+      binding: BillDetailBinding(),
+    ),
+    GetPage(
+      name: RouteName.allComment,
+      page: () => const AllCommentPage(),
+      binding: AllCommentBinding(),
+    ),
+    GetPage(
+      name: RouteName.createComment,
+      page: () => const CreateCommentPage(),
+      binding: CreateCommentBinding(),
+    ),
+    GetPage(
+      name: RouteName.editProfile,
+      page: () => const EditProfilePage(),
+      binding: EditProfileBinding(),
     ),
   ];
 }

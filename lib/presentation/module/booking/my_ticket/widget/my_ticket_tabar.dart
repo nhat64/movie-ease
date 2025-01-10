@@ -14,7 +14,7 @@ class MyTicketTabBar extends StatefulWidget {
   State<MyTicketTabBar> createState() => _MyTicketTabBarState();
 }
 
-class _MyTicketTabBarState extends State<MyTicketTabBar> with SingleTickerProviderStateMixin {
+class _MyTicketTabBarState extends State<MyTicketTabBar> {
   late TabController tabController;
 
   MyTicketController get controller => widget.controller;
@@ -22,11 +22,7 @@ class _MyTicketTabBarState extends State<MyTicketTabBar> with SingleTickerProvid
   @override
   void initState() {
     super.initState();
-    tabController = TabController(
-      length: controller.tabs.length,
-      vsync: this,
-      initialIndex: 0,
-    );
+    tabController = controller.tabController;
   }
 
   @override

@@ -61,7 +61,10 @@ class SelectCinemaController extends BaseController {
 
     Get.toNamed(
       RouteName.selectShowtime,
-      arguments: SelectShowtimePageData(cinema: cinema),
+      arguments: SelectShowtimePageData(
+        cinema: cinema,
+        movie: pageData.movie,
+      ),
     );
   }
 }

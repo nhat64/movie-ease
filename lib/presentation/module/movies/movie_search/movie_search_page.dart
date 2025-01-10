@@ -5,6 +5,7 @@ import 'package:base_flutter/app/base/widget_common/outline_textfield_custom.dar
 import 'package:base_flutter/app/base/widget_common/scale_button.dart';
 import 'package:base_flutter/app/constans/app_assets.dart';
 import 'package:base_flutter/app/constans/app_colors.dart';
+import 'package:base_flutter/app/utils/day_time.dart';
 import 'package:base_flutter/data/entity/movie_entity.dart';
 import 'package:base_flutter/presentation/module/movies/movie_search/movie_search_controller.dart';
 import 'package:base_flutter/presentation/module/movies/widget/switch_bar.dart';
@@ -129,7 +130,11 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
 
     return GestureDetector(
       onTap: () {
-        Get.toNamed(RouteName.movieDetail, arguments: movie);
+        if (checkShowingDate(movie.date)) {
+          Get.toNamed(RouteName.movieDetail, arguments: movie);
+        } else {
+          Get.snackbar('Thông báo', 'Phim chưa được công chiếu');
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -145,7 +150,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
               height: 160,
               width: 120,
               child: Image.network(
-                movie.poster,
+                movie.avatar,
                 fit: BoxFit.cover,
               ),
             ),
@@ -288,7 +293,7 @@ class MovieSearchPage extends BaseScreen<MovieSearchController> {
 
   _buildBottomsheetFilter() {
     return SizedBox(
-      height: 500,
+      height: 700,
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
